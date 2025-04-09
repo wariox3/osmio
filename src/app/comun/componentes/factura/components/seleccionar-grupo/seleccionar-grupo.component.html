@@ -1,0 +1,16 @@
+<select
+  #selectGrupo
+  class="form-select"
+  [ngClass]="{ 'form-select-sm': !grande }"
+  (change)="onSelectChange($event)"
+  [(ngModel)]="valorInicial"
+>
+  <option [value]="null">
+    {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" | translate }}
+  </option>
+  @for (grupo of grupos(); track $index) {
+    <option [value]="grupo.grupo_id">
+      {{ grupo.grupo_nombre }}
+    </option>
+  }
+</select>

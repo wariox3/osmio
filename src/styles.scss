@@ -1,0 +1,219 @@
+/* You can add global styles to this file, and also import other style files */
+@import "./assets/sass/style.scss";
+// Replace above style with this css file to enable RTL styles
+// @import "./assets/css/style.rtl";
+@import "./assets/sass/plugins.scss";
+// @import "./assets/css/style.rtl.css";
+@import "./assets/sass/style.angular.scss";
+
+// Keenicons - High quality and pixel perfect font icons available in 3 styles, duotone, outline and solid for Metronic elements
+@import "./assets/plugins/keenicons/duotone/style.css";
+@import "./assets/plugins/keenicons/outline/style.css";
+@import "./assets/plugins/keenicons/solid/style.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+.h-100px {
+  height: 100px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+
+  input {
+    padding-right: 75px !important; /* Ajusta el espaciado derecho para el ícono */
+    box-sizing: border-box;
+  }
+
+  i {
+    font-size: 1.4rem;
+    position: absolute;
+    right: 12px; /* Ajusta la posición horizontal del ícono */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  input[type="password"].form-control.is-invalid {
+    background-position: right calc(0.375em + 2.5rem) center;
+  }
+
+  input[type="password"].form-control.is-valid {
+    background-position: right calc(0.375em + 2.5rem) center;
+  }
+
+  input[type="text"].form-control.is-invalid {
+    background-position: right calc(0.375em + 2.5rem) center;
+  }
+
+  input[type="text"].form-control.is-valid {
+    background-position: right calc(0.375em + 2.5rem) center;
+  }
+}
+
+table {
+  thead {
+    font-weight: bold;
+  }
+  tbody {
+    input.sinBorder {
+      border-width: 0px;
+      padding: 0px;
+      resize: none;
+      width: 100%;
+      text-align: center;
+      box-sizing: border-box;
+
+      &:hover {
+        background-color: #f9f9f9;
+      }
+
+      &:focus {
+        outline: none;
+        background-color: #f9f9f9;
+      }
+    }
+  }
+}
+
+.position-relative input[type="text"].form-control.is-invalid {
+  background-position: right calc(0.375em + 2.5rem) center;
+}
+
+.position-relative input[type="text"].form-control.is-valid {
+  background-position: right calc(0.375em + 2.5rem) center;
+}
+
+.bg-gray-100 {
+  background-color: var(--bs-gray-100) !important;
+}
+
+.my-overlay {
+  left: 0 !important;
+  top: 0 !important;
+  z-index: 10000 !important;
+  width: 100% !important;
+  height: 100% !important;
+  position: fixed !important;
+  background-color: #f2f3f8 !important;
+  color: #5e6278;
+  cursor: pointer !important;
+  visibility: visible !important;
+  transition: visibility 0s, opacity 0.4s linear !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: wait !important;
+  overflow: hidden !important;
+}
+
+.my-overlay i.fa.fa-spinner.fa-spin,
+.spinner-big {
+  font-size: 100px !important;
+}
+
+table {
+  .ki-duotone,
+  .ki-outline,
+  .ki-solid,
+  .fa-regular,
+  .fa-solid {
+    font-size: 1.8rem;
+    width: 20.484px;
+    height: 23.406px;
+  }
+}
+
+.select2Custom {
+  border: 1px solid var(--bs-gray-300);
+  border-radius: 0.475rem;
+  padding: 0.3rem !important;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.ng-select.select2Custom .ng-select-container {
+  border: 0px;
+  border-radius: 0.475rem;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.cursor-disabled {
+  cursor: not-allowed;
+}
+
+.encabezadoDetalle {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas: ". ."; //no quitarn renombrar
+  margin-bottom: 1.25rem !important;
+
+  .encabezadoDetalleBotonera {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem !important;
+  }
+
+  .encabezadoDetalleEstados {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr; // Cambiamos a una sola columna
+    grid-template-areas: ".";
+
+    .encabezadoDetalleBotonera {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0 !important;
+
+      .btn-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100% !important;
+      }
+
+      * {
+        width: 100% !important;
+      }
+    }
+
+    .encabezadoDetalleEstados {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      margin-top: 5px;
+    }
+  }
+}
+
+.disabled-cursor {
+  cursor: not-allowed;
+}
+
+.form-check-input:focus {
+  border-color: #86b7fe;
+  outline: 0;
+  box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+}

@@ -1,0 +1,54 @@
+<div class="container-grid">
+  <div class="filtros">
+    <ng-content select="[base-filtros]"></ng-content>
+    <app-card [titulo]="'FORMULARIOS.TITULOS.COMUNES.FILTRO'">
+      <section card-body>
+        <app-base-filtro
+          (emitirFiltros)="obtenerFiltros($event)"
+          [persistirFiltros]="false"
+          [_tipo]="nombreModelo!"
+        ></app-base-filtro>
+      </section>
+    </app-card>
+  </div>
+  <div class="tabla">
+    <app-card>
+      <section card-titulo>
+        <ng-container *ngIf="submodelo !== undefined; else elseTemplate">
+          {{ "MENU.FUNCIONALIDAD." + (submodelo | uppercase) | translate }}
+        </ng-container>
+        <ng-template #elseTemplate>
+          {{ "MENU.FUNCIONALIDAD." + (_modelo | uppercase) | translate }}
+        </ng-template>
+      </section>
+      <section card-body>
+        <app-comun-tabla
+          [modelo]="_modelo!"
+          [_tipo]="nombreModelo!"
+          [importarConfig]="{
+            endpoint: _endpoint!,
+            nombre: nombreModelo!,
+          }"
+          [datos]="arrItems"
+          [encabezado]="titulos"
+          [cantidad_registros]="cantidad_registros"
+          [cargando]="cargando$ | async"
+          [confirmacionRegistrosEliminado]="confirmacionRegistrosEliminado"
+          [visualizarBtnNuevo]="visualizarBtnNuevo"
+          [visualizarBtnExportarZip]="false"
+          [visualizarColumnaEditar]="visualizarColumnaEditar"
+          (emitirDesplazamiento)="cambiarDesplazamiento($event)"
+          (emitirOrdenamiento)="cambiarOrdemiento($event)"
+          (emitirPaginacion)="cambiarPaginacion($event)"
+          (emitirRegistraEliminar)="eliminarRegistros($event)"
+          (emitirExportarExcel)="descargarExcel()"
+          (emitirNavegarNuevo)="navegarNuevo()"
+          (emitirNavegarDetalle)="navegarDetalle($event)"
+          (emitirNavegarEditar)="navegarEditar($event)"
+          (emitirConsultarLista)="consultarLista()"
+        >
+        </app-comun-tabla>
+      </section>
+    </app-card>
+  </div>
+</div>

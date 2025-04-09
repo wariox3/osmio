@@ -1,0 +1,84 @@
+@if(!visualizarAlerta){
+<!--begin::Alert-->
+<div class="alert alert-danger">
+  <div class="row align-items-center">
+    <!--begin::Wrapper-->
+    <div class="col-9 d-flex align-items-center">
+      <!--begin::Icon-->
+
+      <i class="ki-duotone ki-notification fs-2hx text-danger me-4">
+        <span class="path1"></span>
+        <span class="path2"></span>
+        <span class="path3"></span>
+      </i>
+      <!--end::Icon-->
+      <div class="d-flex flex-column pe-0 pe-sm-10">
+        <!--begin::Title-->
+        <h4 class="fw-semibold text-danger">
+          ¡Nos tomamos en serio la seguridad de tu información!
+        </h4>
+        <!--end::Title-->
+        <!--begin::Content-->
+        <span class="text-danger">
+          Queremos estar seguros de que el correo electrónico con el cual
+          creaste esta cuenta es de tu propiedad.
+          <br />
+          <strong
+            >Debes verificar la cuenta mediante un correo que te enviamos. La
+            cuenta expirará en 3 horas si no está verificada.</strong
+          >
+        </span>
+        <!--end::Content-->
+      </div>
+    </div>
+    <div class="col-3">
+      <button
+        (click)="abrirModal(content)"
+        class="btn btn-danger btn-sm float-end"
+      >
+        ¿No recibiste el correo?
+      </button>
+    </div>
+  </div>
+  <!--end::Wrapper-->
+</div>
+<!--end::Alert-->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h3>Confirmar</h3>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    @if(visualizarMensajeCorreoEnviado){
+    <p>
+      Se ha enviado correctamente un correo electrónico de activación. Revisa tu
+      carpeta de spam si no lo recibes en 3 minutos.
+    </p>
+    <br />
+    <p>{{ displayTimeLeft() }}</p>
+    } @else {
+    <p>
+      !El periodo de activación de tu cuenta expira en 3 horas! Usa el enlace de
+      activación enviado al correo: <strong>{{ usuarioCorreo }}</strong> límite
+      de activación:
+      {{ usuarioFechaLimiteActivarCuenta | date : "YYYY-MM-dd h:mm" }}
+    </p>
+    <p>¿No recibiste el correo?</p>
+    <input class="form-control" type="text" [value]="usuarioCorreo" />
+    }
+  </div>
+  @if(!visualizarMensajeCorreoEnviado){
+  <div class="modal-footer">
+    <button class="btn btn-primary" (click)="reenviarCorreo()">
+      Enviar de nuevo
+    </button>
+  </div>
+  }
+</ng-template>
+
+}

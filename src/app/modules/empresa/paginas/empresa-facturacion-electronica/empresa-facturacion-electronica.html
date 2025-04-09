@@ -1,0 +1,279 @@
+<form
+  class="form w-100"
+  novalidate="novalidate"
+  [formGroup]="formularioDian"
+  (ngSubmit)="activarEmpresa()"
+>
+  <div class="row" *ngIf="rededoc_id !== 'null';">
+    @if (visualizarBtnSiguiente) {
+    <div class="fv-row d-flex mb-5">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        type="submit"
+        (click)="emitirRegistro()"
+      >
+        {{ "FORMULARIOS.BOTONES.COMUNES.SIGUIENTE" | translate }}
+      </button>
+    </div>
+    }
+  </div>
+  <button
+    class="btn btn-primary"
+    *ngIf="rededoc_id !== 'null'"
+    (click)="abirModalEditar(modalEditarConfigutacion)"
+  >
+    Editar
+  </button>
+  <ng-container
+    *ngIf="rededoc_id !== 'null'; else formularioFacturaElectronica"
+  >
+    <div class="row mb-10">
+      <div class="col-md-12 col-sm-12">
+        <label
+          translate="FORMULARIOS.CAMPOS.EMPRESA.FACTURAELECTRONICALABEL"
+          class="fw-semibold text-gray-600 fs-2"
+        ></label>
+        <p class="fw-bold text-gray-800 fs-6">{{ rededoc_id }}</p>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #formularioFacturaElectronica>
+    <div class="fv-row d-flex mb-5">
+      <button type="submit" class="btn btn-primary" type="submit">
+        @if (visualizarBtnSiguiente) { {{
+        "FORMULARIOS.BOTONES.COMUNES.SIGUIENTE" | translate }} } @else { {{
+        "FORMULARIOS.BOTONES.COMUNES.GUARDAR" | translate }} }
+      </button>
+    </div>
+
+    <div class="row mb-10">
+      <div class="col-md-12 col-sm-12">
+        <label
+          translate="FORMULARIOS.CAMPOS.EMPRESA.CODIGOTESTID"
+          class="form-label required"
+        ></label>
+        <input
+          formControlName="set_pruebas"
+          class="form-control bg-transparent"
+          [placeholder]="
+              'FORMULARIOS.CAMPOS.EMPRESA.CODIGOTESTIDPLACEHOLDER' | translate
+            "
+          type="text"
+          autocomplete="off"
+          [ngClass]="{
+              'is-invalid':
+                formularioDian.controls['set_pruebas'].touched &&
+                formularioDian.controls['set_pruebas'].invalid,
+              'is-valid':
+                formularioDian.controls['set_pruebas'].touched &&
+                formularioDian.controls['set_pruebas'].valid
+            }"
+        />
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioDian.controls['set_pruebas']
+            }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+              validation: 'pattern',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.NOVALIDO' | translate,
+              control: formularioDian.controls['set_pruebas']
+            }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+          validation: 'maxlength',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+          cantidadCaracteres: '36',
+          control: formularioDian.controls['set_pruebas']
+        }"
+        ></ng-container>
+        <div class="mt-2">
+          <span
+            >{{ "FORMULARIOS.TITULOS.EMPRESA.FACTURAELECTRONICABUSCARCODIGO" |
+            translate }}</span
+          >
+          <a href="" target="_blank"
+            >{{ "FORMULARIOS.TITULOS.EMPRESA.FACTURAELECTRONICABUSCARCODIGOURL"
+            | translate }}</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="row mb-5">
+      <div class="col-12">
+        <label
+          translate="FORMULARIOS.CAMPOS.EMPRESA.CORREOFACTURACIONELECTRONICA"
+          class="form-label required"
+        ></label>
+        <input
+          class="form-control bg-transparent"
+          type="email"
+          formControlName="correo_facturacion_electronica"
+          [placeholder]="'FORMULARIOS.CAMPOS.COMUNES.CORREO' | translate"
+          name="email"
+          autocomplete="off"
+          [ngClass]="{
+              'is-invalid':
+                formularioDian.controls['correo_facturacion_electronica'].touched &&
+                formularioDian.controls['correo_facturacion_electronica'].invalid,
+              'is-valid':
+                formularioDian.controls['correo_facturacion_electronica'].touched &&
+                formularioDian.controls['correo_facturacion_electronica'].valid
+            }"
+          appInputValuecaseDirective
+          [appInputValueCase]="'minuscula'"
+        />
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioDian.controls['correo_facturacion_electronica']
+            }"
+        ></ng-container>
+        <ng-container
+          [ngTemplateOutlet]="formError"
+          [ngTemplateOutletContext]="{
+              validation: 'email',
+              message:
+                'FORMULARIOS.VALIDACIONES.COMUNES.TIPOCORREO' | translate,
+              control: formularioDian.controls['correo_facturacion_electronica']
+            }"
+        ></ng-container>
+      </div>
+    </div>
+    <div class="row mb-5">
+      <div class="col-12">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="copia_correo_facturacion_electronica"
+            formControlName="copia_correo_facturacion_electronica"
+          />
+          <label
+            class="form-check-label text-gray-700"
+            for="copia_correo_facturacion_electronica"
+            translate="FORMULARIOS.CAMPOS.EMPRESA.COPIACORREOFACTURAELECTRONICA"
+          >
+          </label>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</form>
+
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+  let-cantidadCaracteres="cantidadCaracteres"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        <span role="alert"> {{ message }} {{ cantidadCaracteres }} </span>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #modalEditarConfigutacion let-modal>
+  <div class="modal-header">
+    <h4>Cambiar correo</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form
+      class="form w-100"
+      novalidate="novalidate"
+      [formGroup]="formularioDianEditar"
+      (ngSubmit)="editarEmpresa()"
+    >
+      <div class="row mb-5">
+        <div class="col-12">
+          <label
+            translate="FORMULARIOS.CAMPOS.COMUNES.CORREO"
+            class="form-label required"
+          ></label>
+          <input
+            class="form-control bg-transparent"
+            type="email"
+            formControlName="correo_facturacion_electronica"
+            [placeholder]="'FORMULARIOS.CAMPOS.COMUNES.CORREO' | translate"
+            name="email"
+            autocomplete="off"
+            [ngClass]="{
+              'is-invalid':
+                formularioDianEditar.controls['correo_facturacion_electronica'].touched &&
+                formularioDianEditar.controls['correo_facturacion_electronica'].invalid,
+              'is-valid':
+              formularioDianEditar.controls['correo_facturacion_electronica'].touched &&
+              formularioDianEditar.controls['correo_facturacion_electronica'].valid
+            }"
+          />
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioDianEditar.controls['correo_facturacion_electronica']
+            }"
+          ></ng-container>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'email',
+              message:
+                'FORMULARIOS.VALIDACIONES.COMUNES.TIPOCORREO' | translate,
+              control: formularioDianEditar.controls['correo_facturacion_electronica']
+            }"
+          ></ng-container>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="copia_correo_facturacion_electronica"
+              formControlName="copia_correo_facturacion_electronica"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="copia_correo_facturacion_electronica"
+              translate="FORMULARIOS.CAMPOS.EMPRESA.COPIACORREOFACTURAELECTRONICA"
+            >
+            </label>
+          </div>
+        </div>
+      </div>
+      <button
+        translate="FORMULARIOS.BOTONES.COMUNES.GUARDAR"
+        type="submit"
+        class="btn btn-primary"
+        type="submit"
+        #btnGuardar
+      ></button>
+    </form>
+  </div>
+</ng-template>

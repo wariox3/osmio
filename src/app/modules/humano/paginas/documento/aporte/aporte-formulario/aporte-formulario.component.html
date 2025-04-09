@@ -1,0 +1,253 @@
+<form [formGroup]="formularioAporte" (ngSubmit)="enviarFormulario()">
+  <app-comun-encabezado-formulario-nuevo
+    [estadoAprobado]="false"
+  ></app-comun-encabezado-formulario-nuevo>
+  <app-card>
+    <section card-titulo>
+      <app-comun-titulo-accion [nombreModelo]="'aporte'"></app-comun-titulo-accion>
+    </section>
+    <section card-body>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.CAMPOS.HUMANO.APORTE.SUCURSAL"
+          ></label>
+          <select
+            class="form-select"
+            formControlName="sucursal"
+            [ngClass]="{
+              'is-invalid':
+                formularioAporte.controls['sucursal'].touched &&
+                formularioAporte.controls['sucursal'].invalid,
+              'is-valid':
+                formularioAporte.controls['sucursal'].touched &&
+                formularioAporte.controls['sucursal'].valid
+            }"
+          >
+            <option value="">
+              {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" | translate }}
+            </option>
+            <option
+              *ngFor="let sucursal of arrSucursales"
+              [value]="sucursal.id"
+              [selected]="
+                sucursal.id === formularioAporte.controls.sucursal.value
+              "
+            >
+              {{ sucursal.nombre }}
+            </option>
+          </select>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioAporte.controls['sucursal']
+            }"
+          ></ng-container>
+        </div>
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.TITULOS.COMUNES.FORMAPRESENTACION"
+          ></label>
+          <select
+            class="form-select"
+            formControlName="presentacion"
+            [ngClass]="{
+              'is-invalid':
+                formularioAporte.controls['presentacion'].touched &&
+                formularioAporte.controls['presentacion'].invalid,
+              'is-valid':
+                formularioAporte.controls['presentacion'].touched &&
+                formularioAporte.controls['presentacion'].valid
+            }"
+          >
+            <option value="">
+              {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" | translate }}
+            </option>
+            @for (presentacion of presentacionLista; track $index) {
+            <option [value]="presentacion.value">
+              {{ presentacion.nombre }}
+            </option>
+            }
+          </select>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioAporte.controls['presentacion']
+            }"
+          ></ng-container>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.TITULOS.COMUNES.ANIO"
+          ></label>
+          <input
+            formControlName="anio"
+            class="form-control"
+            type="text"
+            autocomplete="off"
+            [min]="formularioAporte.controls['anio'].value"
+            [ngClass]="{
+              'is-invalid':
+                (formularioAporte.controls['anio'].touched &&
+                  formularioAporte.controls['anio'].invalid) ||
+                formularioAporte.errors?.fechaInvalida ||
+                formularioAporte.errors?.minimoDias,
+              'is-valid':
+                formularioAporte.controls['anio'].touched &&
+                formularioAporte.controls['anio'].valid
+            }"
+          />
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioAporte.controls['anio']
+            }"
+          ></ng-container>
+        </div>
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.TITULOS.COMUNES.MES"
+          ></label>
+          <select
+            class="form-select"
+            formControlName="mes"
+            [ngClass]="{
+              'is-invalid':
+                formularioAporte.controls['mes'].touched &&
+                formularioAporte.controls['mes'].invalid,
+              'is-valid':
+                formularioAporte.controls['mes'].touched &&
+                formularioAporte.controls['mes'].valid
+            }"
+          >
+            <option value="">
+              {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" | translate }}
+            </option>
+            <option
+              *ngFor="let mes of fechasService.meses.es; let i = index"
+              [value]="i + 1"
+            >
+              {{ mes }}
+            </option>
+          </select>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioAporte.controls['mes']
+            }"
+          ></ng-container>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.CAMPOS.GENERAL.CONTRATO.ENTIDADRIESGO"
+          ></label>
+          <ng-select
+            [items]="listaEntidadesRiesgo"
+            bindLabel="nombre_extendido"
+            bindValue="id"
+            formControlName="entidad_riesgo"
+            notFoundText="Sin elementos"
+            placeholder="Selecciona un elemento"
+            class="select2Custom"
+          >
+          </ng-select>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioAporte.controls['entidad_riesgo']
+            }"
+          ></ng-container>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.CAMPOS.GENERAL.CONTRATO.ENTIDADSENA"
+          ></label>
+          <ng-select
+            [items]="listaEntidadesSena"
+            bindLabel="nombre_extendido"
+            bindValue="id"
+            formControlName="entidad_sena"
+            notFoundText="Sin elementos"
+            placeholder="Selecciona un elemento"
+            class="select2Custom"
+          >
+          </ng-select>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioAporte.controls['entidad_sena']
+            }"
+          ></ng-container>
+        </div>
+      </div>
+
+      <div class="row mb-5">
+        <div class="col-12 col-md-6"></div>
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.CAMPOS.GENERAL.CONTRATO.ENTIDADICBF"
+          ></label>
+          <ng-select
+            [items]="listaEntidadesIcbf"
+            bindLabel="nombre_extendido"
+            bindValue="id"
+            formControlName="entidad_icbf"
+            notFoundText="Sin elementos"
+            placeholder="Selecciona un elemento"
+            class="select2Custom"
+          >
+          </ng-select>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioAporte.controls['entidad_icbf']
+            }"
+          ></ng-container>
+        </div>
+      </div>
+    </section>
+  </app-card>
+</form>
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+  let-cantidadCaracteres="cantidadCaracteres"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        <span role="alert"> {{ message }} {{ cantidadCaracteres }} </span>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

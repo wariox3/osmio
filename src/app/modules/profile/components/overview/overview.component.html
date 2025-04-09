@@ -1,0 +1,80 @@
+<div class="card shadow-sm">
+  <div class="card-header">
+    <h3
+      translate="FORMULARIOS.TITULOS.CONTENEDOR.TITULO"
+      class="card-title"
+    ></h3>
+  </div>
+  <div class="table-responsive-sm p-5">
+    <table class="table table-row-dashed table-row-gray-300">
+      <tbody>
+        <ng-container *ngIf="arrContenedores.length > 0; else sinContenedores">
+          <tr
+            *ngFor="let contenedor of arrContenedores"
+            style="height: calc(82px - 0.6rem) !important"
+          >
+            <td style="width: 120px">
+              <ng-container *ngIf="contenedor.imagen">
+                <img
+                  [ngSrc]="contenedor.imagen"
+                  [alt]="'Error al cargar logo'"
+                  width="120"
+                  height="120"
+                  class="img-thumbnail"
+                />
+              </ng-container>
+            </td>
+            <td>
+              <p class="text-dark fw-bolder fs-6">
+                {{ contenedor.nombre }}
+                <small class="badge badge-light-primary fs-8 fw-bold">{{
+                  contenedor.rol
+                }}</small>
+              </p>
+              <span class="text-muted fw-bold text-muted d-block fs-7">
+                {{ contenedor.subdominio }}{{ dominioApp }}
+              </span>
+            </td>
+            <td class="w-50px">
+              <div
+                ngbDropdown
+                class="d-inline-block"
+                *ngIf="contenedor.rol === 'propietario'"
+              ></div>
+            </td>
+            <td>{{ contenedor.usuarios }} / {{ contenedor.usuarios_base }}</td>
+          </tr>
+        </ng-container>
+        <ng-template #sinContenedores>
+          <ng-container *ngIf="cargandoContederes; else mensaje">
+            <tr>
+              <td style="width: 120px">
+                <app-comun-skeleton-loading
+                  [height]="120"
+                  [width]="120"
+                />
+              </td>
+              <td>
+                <app-comun-skeleton-loading [height]="20" [width]="200" />
+              </td>
+              <td class="w-150px">
+                <app-comun-skeleton-loading [height]="20" [width]="150" />
+              </td>
+              <td class="w-150px">
+                <app-comun-skeleton-loading [height]="20" [width]="150" />
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #mensaje>
+            <tr>
+              <td
+                colspan="4"
+                translate="FORMULARIOS.MENSAJES.CONTENEDOR.SINCONTENEDORES"
+              ></td>
+            </tr>
+          </ng-template>
+        </ng-template>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>RedDoc</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="./assets/media/logos/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <style>
+      #my-overlay {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        z-index: 9999;
+      }
+    </style>
+  </head>
+
+  <body root id="kt_body" class="mat-typography">
+    <div id="splash-screen" class="my-overlay">
+      <img style="width: 10rem; margin-bottom: 5px;" class="logo-slash" src="./assets/media/logos/default-small.svg" alt="Metronic logo" />
+      <span>Cargando ...</span>
+    </div>
+    <!--begin::Theme mode setup on page load-->
+    <script defer>
+      if (document.documentElement) {
+        var defaultThemeMode = "system";
+
+        var hasKTName = document.body.hasAttribute("data-kt-name");
+        var lsKey = "kt_" + (hasKTName ? name + "_" : "") + "theme_mode_value";
+        var themeMode = localStorage.getItem(lsKey);
+        if (!themeMode) {
+          if (defaultThemeMode === "system") {
+            themeMode = window.matchMedia("(prefers-color-scheme: dark)")
+              .matches
+              ? "dark"
+              : "light";
+          } else {
+            themeMode = defaultThemeMode;
+          }
+        }
+
+        document.documentElement.setAttribute("data-bs-theme", themeMode);
+      }
+    </script>
+    <!--end::Theme mode setup on page load-->
+  </body>
+</html>

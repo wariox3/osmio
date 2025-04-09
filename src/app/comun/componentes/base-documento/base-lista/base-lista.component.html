@@ -1,0 +1,68 @@
+<div class="container-grid">
+  <div class="filtros">
+    <ng-content select="[base-filtros]"></ng-content>
+    <app-card [titulo]="'FORMULARIOS.TITULOS.COMUNES.FILTRO'">
+      <section card-body>
+        <app-base-filtro
+          (emitirFiltros)="obtenerFiltros($event)"
+          [_tipo]="_tipo"
+        ></app-base-filtro>
+      </section>
+    </app-card>
+  </div>
+  <div class="tabla">
+    <app-card [titulo]="'MENU.FUNCIONALIDAD.' + (nombreModelo | uppercase)">
+      <section card-body>
+        <app-comun-tabla
+          [modelo]="_modelo!"
+          [_tipo]="_tipo"
+          [datos]="arrItems"
+          [cargando]="mostrarVentanaCargando$ | async"
+          [encabezado]="titulos"
+          [visualizarBtnExtra]="botonGenerar"
+          [botonesExtras]="botonesExtras"
+          [cantidad_registros]="cantidad_registros"
+          [visualizarIdModal]="true"
+          [confirmacionRegistrosEliminado]="confirmacionRegistrosEliminado"
+          [visualizarBtnNuevo]="visualizarBtnNuevo"
+          [visualizarColumnaEditar]="visualizarColumnaEditar"
+          [visualizarBtnEliminar]="visualizarBtnEliminar"
+          [visualizarColumnaSeleccionar]="visualizarColumnaSeleccionar"
+          [visualizarBtnImportar]="visualizarBtnImportar"
+          [visualizarBtnExportarZip]="visualizarBtnExportarZip"
+          (emitirDesplazamiento)="cambiarDesplazamiento($event)"
+          (emitirOrdenamiento)="cambiarOrdemiento($event)"
+          (emitirPaginacion)="cambiarPaginacion($event)"
+          (emitirRegistraEliminar)="eliminarRegistros($event)"
+          (emitirExportarExcel)="descargarExcel()"
+          (emitirExportarZip)="descargarZip()"
+          (emitirNavegarNuevo)="navegarNuevo()"
+          (emitirNavegarDetalle)="navegarDetalle($event)"
+          (emitirNavegarEditar)="navegarEditar($event)"
+          (emitirClickBotonExtra)="abrirModal($event, content)"
+          (emitirConsultarLista)="consultarLista()"
+        >
+        </app-comun-tabla>
+      </section>
+    </app-card>
+  </div>
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ tituloModal }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <app-modal-dinamico
+        (emitirConsultaLista)="consultaListaModal()"
+        [nombreComponente]="nombreComponente"
+      ></app-modal-dinamico>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,339 @@
+<div ngbDropdown class="d-inline-block">
+  <button
+    type="button"
+    class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
+    id="dropdownBasic1"
+    ngbDropdownToggle
+  >
+    Opciones
+  </button>
+  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+    <ng-content select="[extra-buttons]"></ng-content>
+    <button
+      [disabled]="opcionesDesaprobarBoton.deshabilitado"
+      ngbDropdownItem
+      (click)="confirmarDesaprobarDocumento()"
+    >
+      Desaprobar
+    </button>
+    <div class="dropdown-divider"></div>
+    <button ngbDropdownItem (click)="abrirModalArchivos(archivosContent)">
+      Archivos
+    </button>
+    <button ngbDropdownItem (click)="abrirModalContabilidad(content)">
+      Contabilidad
+    </button>
+    <button
+      [disabled]="opcionesDesaprobarBoton.deshabilitado"
+      ngbDropdownItem
+      (click)="consultarInformacionCorregir(corregirContent)"
+    >
+      Corregir
+    </button>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Contabilidad</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    @if(cantidadRegistros <= 50){
+      @if (totalDebito !== totalCredito) {
+        <div class="row">
+          <div class="col-12">
+            <div class="alert alert-danger" role="alert">
+              El registro contable esta descuadrado
+            </div>
+          </div>
+        </div>
+      }
+    }
+    <div class="row">
+      <app-comun-tabla
+        [modelo]="modelo"
+        [datos]="arrDocumentos"
+        [cantidad_registros]="cantidadRegistros"
+        [visualizarColumnaEditar]="false"
+        [visualizarColumnaDetalle]="false"
+        [visualizarColumnaSeleccionar]="false"
+        [visualizarBtnImportar]="true"
+        [visualizarBtnExportar]="true"
+        [visualizarBtnNuevo]="false"
+        [visualizarBtnEliminar]="false"
+        [visualizarBtnImportar]="false"
+        [visualizarBtnColumnas]="false"
+        [visualizarBtnExportarZip]="false"
+        (emitirExportarExcel)="descargarExcel()"
+        (emitirDesplazamiento)="cambiarDesplazamiento($event)"
+        (emitirOrdenamiento)="cambiarOrdemiento($event)"
+        (emitirPaginacion)="cambiarPaginacion($event)"
+      >
+        <section botones-extra-derecha>
+          @if (documento?.estado_contabilizado) {
+            @if (cargandoAccion()) {
+              <button
+                class="btn btn-sm btn-bg-primary btn-color-white"
+                type="button"
+                disabled
+              >
+                <span
+                  class="spinner-border spinner-border-sm me-1"
+                  aria-hidden="true"
+                ></span>
+                <span role="status">Cargando...</span>
+              </button>
+            } @else {
+              <button
+                (click)="descontabilizar()"
+                class="btn btn-sm bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
+              >
+                Descontabilizar
+              </button>
+            }
+          } @else {
+            @if (cargandoAccion()) {
+              <button
+                class="btn btn-sm btn-bg-primary btn-color-white"
+                type="button"
+                disabled
+              >
+                <span
+                  class="spinner-border spinner-border-sm me-1"
+                  aria-hidden="true"
+                ></span>
+                <span role="status">Cargando...</span>
+              </button>
+            } @else {
+              <button
+                (click)="contabilizar()"
+                class="btn btn-sm bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
+              >
+                Contabilizar
+              </button>
+            }
+          }
+        </section>
+        @if (cantidadRegistros <= 50) {
+          <tr tr-custom-end-table appAnimationFadeinUp>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-end">{{ totalDebito | currency: "$" }}</td>
+            <td class="text-end">{{ totalCredito | currency: "$" }}</td>
+            <td></td>
+            <td></td>
+          </tr>
+        }
+      </app-comun-tabla>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #archivosContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Archivos</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-cargar-archivos
+      [archivoTipo]="1"
+      [documentoId]="this.detalle"
+    ></app-cargar-archivos>
+    <!-- @if (listaArchivos.length > 0) {
+      <table id="tableDetalles" class="table table-bordered table-sm">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="bg-gray-100" style="width: 50px">Id</th>
+            <th class="bg-gray-100">Fecha Y Hora</th>
+            <th class="bg-gray-100">Nombre</th>
+            <th class="bg-gray-100">Tamaño</th>
+            <th class="bg-gray-100" style="width: 50px"></th>
+            <th class="bg-gray-100" style="width: 50px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (archivo of listaArchivos; track $index) {
+            <tr>
+              <td class="w-40px">{{ archivo.id }}</td>
+              <td>{{ archivo.fecha | date: "YYYY-MM-d h:mm a" }}</td>
+              <td>{{ archivo.nombre }}</td>
+              <td>{{ archivo.tamano | tamanoArchivo }}</td>
+              <td>
+                <button
+                  style="padding-top: 0; padding-bottom: 0; font-weight: bold"
+                  (click)="descargarArchivo(archivo)"
+                  class="btn"
+                >
+                  <i class="bi bi-download"></i>
+                </button>
+              </td>
+              <td class="text-center">
+                @if ((estadosBotonEliminar$ | async)?.[$index]) {
+                  <div
+                    class="spinner-border spinner-border-sm text-danger"
+                    role="status"
+                  >
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                } @else {
+                  <button
+                    style="padding-top: 0; padding-bottom: 0; font-weight: bold"
+                    class="btn"
+                    (click)="confirmarEliminarArchivo(archivo.id, $index)"
+                  >
+                    <i class="bi bi-trash delete-btn"></i>
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <div class="text-center">
+        <p>No has cargado archivos aún.</p>
+      </div>
+    }
+
+    <div class="mt-5">
+      @if (subiendoArchivo$ | async) {
+        <button class="btn btn-sm btn-primary" type="button" disabled>
+          <span
+            class="spinner-border spinner-border-sm me-2"
+            aria-hidden="true"
+          ></span>
+          <span role="status">Subiendo...</span>
+        </button>
+      } @else {
+        <input
+          type="file"
+          #input
+          class="input"
+          (change)="cargarArchivo($event)"
+        />
+        <button class="btn btn-primary btn-sm" (click)="input.click()">
+          <i class="bi bi-upload"></i>
+          Cargar archivo
+        </button>
+      }
+    </div> -->
+  </div>
+</ng-template>
+
+<ng-template #corregirContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Corregir</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="d-flex justify-content-between my-4">
+      <app-comun-paginador
+        [cantidadRegistros]="cantidadRegistrosCorregir()"
+        (emitirDesplazamiento)="cambiarDesplazamiento($event)"
+        (emitirPaginacion)="cambiarPaginacion($event)"
+      ></app-comun-paginador>
+    </div>
+    <div class="row">
+      <div class="table-responsive-sm">
+        <table id="tableDetalles" class="table table-bordered table-sm">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="bg-gray-100" style="width: 50px">Id</th>
+              <td>Item</td>
+              <td>Cantidad</td>
+              <td>Precio</td>
+              <td>Subtotal</td>
+              <td class="w-150px">Base</td>
+              <td>Grupo</td>
+              <td>Contacto</td>
+            </tr>
+          </thead>
+          <tbody>
+            @for (arrDocumento of arrDocumentos; track $index) {
+              <tr>
+                <td>
+                  {{ arrDocumento.id }}
+                </td>
+                <td>
+                  {{ arrDocumento.item_nombre }}
+                </td>
+                <td>
+                  {{ arrDocumento.cantidad }}
+                </td>
+                <td class="text-end">
+                  {{ arrDocumento.precio | number: "1.0-0" }}
+                </td>
+                <td class="text-end">
+                  {{ arrDocumento.subtotal | number: "1.0-0" }}
+                </td>
+                <td class="text-end">
+                  @if (arrDocumento.tipo_registro === "C") {
+                    <input
+                      [value]="arrDocumento.base"
+                      type="number"
+                      (blur)="actualizarBase($event, arrDocumento.id)"
+                      formControlName="base"
+                      class="form-control-sm form-control"
+                      appSoloNumeros
+                    />
+                  }
+                </td>
+                <td>
+                  <select
+                    class="form-select form-select-sm"
+                    (change)="actualizarGrupo($event, arrDocumento.id)"
+                  >
+                    <option value="">
+                      {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" | translate }}
+                    </option>
+                    <option
+                      *ngFor="let grupo of arrGrupo"
+                      [value]="grupo.grupo_id"
+                      [selected]="grupo.grupo_id === arrDocumento.grupo_id"
+                    >
+                      {{ grupo.grupo_nombre }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  @if (arrDocumento.tipo_registro === "C") {
+                    <app-seleccionar-contacto
+                      [itemNombre]="arrDocumento.contacto_nombre_corto"
+                      (emitirItemSeleccionado)="
+                        actualizarContactoSeleccionado($event, arrDocumento.id)
+                      "
+                      (emitirLineaVacia)="
+                        actualizarContactoSeleccionado($event, arrDocumento.id)
+                      "
+                    ></app-seleccionar-contacto>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-template>

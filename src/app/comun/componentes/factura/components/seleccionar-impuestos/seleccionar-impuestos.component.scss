@@ -1,0 +1,31 @@
+input{
+  border-width: 0px;
+  &:focus{
+    outline: none;
+  }
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.d-flex.flex-wrap.align-items-start {
+  flex-wrap: wrap;
+}
+
+.dropdown-menu {
+  z-index: 1;
+}
+
+
+.dropdown-toggle {
+  padding-right: 50px;
+}
+
+
+.dropdown-toggle::after {
+  display: none !important;
+  content: none !important;
+}

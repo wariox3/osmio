@@ -1,0 +1,307 @@
+<app-base-filtro
+  (emitirFiltros)="obtenerFiltros($event)"
+  [nombreFiltroCustom]="'aporte_detalle'"
+  [_tipo]="'DOCUMENTO'"
+></app-base-filtro>
+<div class="d-flex justify-content-between my-4">
+  <app-comun-paginador
+    [cantidadRegistros]="cantidadRegistros()"
+    (emitirDesplazamiento)="cambiarDesplazamiento($event)"
+    (emitirPaginacion)="cambiarPaginacion($event)"
+  ></app-comun-paginador>
+  <div class="btn-group contenedor-btn-group" role="group">
+    <div class="btn-group" ngbDropdown #OpcionesDropdown="ngbDropdown">
+      <button
+        type="button"
+        class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
+        id="dropdownBasic1"
+        ngbDropdownToggle
+      >
+        {{ "FORMULARIOS.BOTONES.COMUNES.EXCEL" | translate }}
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button (click)="descargarExcelDetalle()" ngbDropdownItem>
+          {{ "FORMULARIOS.BOTONES.COMUNES.EXCEL" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="table-responsive">
+  <table id="tableDetalles" class="table table-bordered table-row-gray-500">
+    <thead>
+      <tr class="bg-gray-100 text-center">
+        <th style="width: 50px">Id</th>
+        <th>Identificación</th>
+        <th>Empleado</th>
+        <th>Contrato</th>
+        <th ngbTooltip="Ingreso" placement="top" container="body">ING</th>
+        <th ngbTooltip="Retiro" placement="top" container="body">RET</th>
+        <th
+          ngbTooltip="Variacion permanente salario"
+          placement="top"
+          container="body"
+        >
+          VSP
+        </th>
+        <th
+          ngbTooltip="Variacion transitoria salario"
+          placement="top"
+          container="body"
+        >
+          VST
+        </th>
+        <th
+          ngbTooltip="suspension temporal contrato"
+          placement="top"
+          container="body"
+        >
+          SLN
+        </th>
+        <th ngbTooltip="Incapacidad general" placement="top" container="body">
+          IGE
+        </th>
+        <th ngbTooltip="Licencia maternidad" placement="top" container="body">
+          LMA
+        </th>
+        <th ngbTooltip="Vacaciones" placement="top" container="body">VAC</th>
+        <th ngbTooltip="Licencia remunerada" placement="top" container="body">
+          LRM
+        </th>
+        <th
+          ngbTooltip="Dias incapacidad laboral"
+          placement="top"
+          container="body"
+        >
+          D_IRP
+        </th>
+        <th ngbTooltip="Salario integral" placement="top" container="body">
+          SI
+        </th>
+        <th>Salario</th>
+        <th ngbTooltip="Horas" placement="top" container="body">H</th>
+        <th ngbTooltip="Dias pensión" placement="top" container="body">D_P</th>
+        <th ngbTooltip="Dias salud" placement="top" container="body">D_S</th>
+        <th ngbTooltip="Dias riesgos" placement="top" container="body">D_R</th>
+        <th ngbTooltip="Dias caja" placement="top" container="body">D_C</th>
+        <th
+          ngbTooltip="Base cotización pensión"
+          placement="top"
+          container="body"
+        >
+          BC_P
+        </th>
+        <th ngbTooltip="Base cotización salud" placement="top" container="body">
+          BC_S
+        </th>
+        <th
+          ngbTooltip="Base cotizacion riesgos"
+          placement="top"
+          container="body"
+        >
+          BC_R
+        </th>
+        <th ngbTooltip="Base cotizacion caja" placement="top" container="body">
+          BC_C
+        </th>
+        <th ngbTooltip="Tarifa pensión" placement="top" container="body">T_P</th>
+        <th ngbTooltip="Tarifa salud" placement="top" container="body">T_S</th>
+        <th ngbTooltip="Tarifa riesgos" placement="top" container="body">T_R</th>
+        <th ngbTooltip="Tarifa caja" placement="top" container="body">T_C</th>
+        <th ngbTooltip="Tarifa sena" placement="top" container="body">T_S</th>
+        <th ngbTooltip="Tarifa icbf" placement="top" container="body">T_ICBF</th>
+        <th ngbTooltip="Cotización pensión" placement="top" container="body">
+          C_P
+        </th>
+        <th
+          ngbTooltip="Aporte solidaridad solidaridad"
+          placement="top"
+          container="body"
+        >
+          F_SOL
+        </th>
+        <th
+          ngbTooltip="Aporte solidaridad subsistencia"
+          placement="top"
+          container="body"
+        >
+          F_SUB
+        </th>
+        <th
+          ngbTooltip="Aporte voluntario pension afiliado"
+          placement="top"
+          container="body"
+        >
+          VOL_AFI
+        </th>
+        <th
+          ngbTooltip="Aporte voluntario pension aportante"
+          placement="top"
+          container="body"
+        >
+          VOL_APO
+        </th>
+        <th ngbTooltip="Cotización salud" placement="top" container="body">
+          C_S
+        </th>
+        <th ngbTooltip="Cotización riesgos" placement="top" container="body">
+          C_R
+        </th>
+        <th ngbTooltip="Cotización caja" placement="top" container="body">
+          C_C
+        </th>
+        <th ngbTooltip="Cotización sena" placement="top" container="body">
+          C_SENA
+        </th>
+        <th ngbTooltip="Cotización icbf" placement="top" container="body">
+          C_ICBF
+        </th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(aporteDetalle of arrAporteDetalle(); track $index){
+      <tr>
+        <td style="width: 50px">
+          {{ aporteDetalle.id }}
+        </td>
+        <td>
+          {{
+            aporteDetalle.aporte_contrato_contrato_contacto_numero_identificacion
+          }}
+        </td>
+        <td>
+          {{ aporteDetalle.aporte_contrato_contrato_contacto_nombre_corto }}
+        </td>
+        <td>
+          {{ aporteDetalle.aport_contrato_contrato_id }}
+        </td>
+        <td class="text-center">
+          {{ aporteDetalle.ingreso | siNo }}
+        </td>
+        <td class="text-center">
+          {{ aporteDetalle.retiro | siNo }}
+        </td>
+        <td class="text-center">
+          {{ aporteDetalle.variacion_permanente_salario | siNo }}
+        </td>
+        <td class="text-center">
+          {{ aporteDetalle.variacion_transitoria_salario | siNo }}
+        </td>
+        <td class="text-center">
+          {{ aporteDetalle.suspension_temporal_contrato | siNo }}
+        </td>
+        <td class="text-center">
+          {{ aporteDetalle.incapacidad_general | siNo }}
+        </td>
+        <td class="text-center">
+          {{ aporteDetalle.licencia_maternidad | siNo }}
+        </td>
+        <td class="text-center">
+          {{ aporteDetalle.vacaciones | siNo }}
+        </td>
+        <td class="text-center">
+          {{ aporteDetalle.licencia_remunerada | siNo }}
+        </td>
+        <td>
+          {{ aporteDetalle.dias_incapacidad_laboral }}
+        </td>
+        <td class="text-center">
+          {{ aporteDetalle.salario_integral | siNo }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.aporte_contrato_salario | number : "1.2-2" }}
+        </td>
+        <td>
+          {{ aporteDetalle.horas }}
+        </td>
+        <td>
+          {{ aporteDetalle.dias_pension }}
+        </td>
+        <td>
+          {{ aporteDetalle.dias_salud }}
+        </td>
+        <td>
+          {{ aporteDetalle.dias_riesgos }}
+        </td>
+        <td>
+          {{ aporteDetalle.dias_caja }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.base_cotizacion_pension | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.base_cotizacion_salud | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.base_cotizacion_riesgos | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.base_cotizacion_caja | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.tarifa_pension | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.tarifa_salud | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.tarifa_riesgos | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.tarifa_caja | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.tarifa_sena | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.tarifa_icbf | number : "1.2-2" }}
+        </td>
+        <td>
+          {{ aporteDetalle.cotizacion_pension | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{
+            aporteDetalle.cotizacion_solidaridad_solidaridad | number : "1.2-2"
+          }}
+        </td>
+        <td class="text-end">
+          {{
+            aporteDetalle.cotizacion_solidaridad_subsistencia | number : "1.2-2"
+          }}
+        </td>
+        <td class="text-end">
+          {{
+            aporteDetalle.cotizacion_voluntario_pension_afiliado
+              | number : "1.2-2"
+          }}
+        </td>
+        <td class="text-end">
+          {{
+            aporteDetalle.cotizacion_voluntario_pension_aportante
+              | number : "1.2-2"
+          }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.cotizacion_salud | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.cotizacion_riesgos | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.cotizacion_caja | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.cotizacion_sena | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.cotizacion_icbf | number : "1.2-2" }}
+        </td>
+        <td class="text-end">
+          {{ aporteDetalle.cotizacion_total | number : "1.2-2" }}
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

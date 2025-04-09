@@ -1,0 +1,353 @@
+<form [formGroup]="formularioContenedor" (ngSubmit)="formSubmit()">
+  <div class="row mb-5">
+    <div class="col-md-12 col-sm-12">
+      <label class="form-label required"> Nombre de la empresa </label>
+      <input
+        formControlName="nombre"
+        placeholder="Nombre"
+        class="form-control bg-transparent"
+        type="text"
+        autocomplete="off"
+        [ngClass]="{
+          'is-invalid':
+            formularioContenedor.controls['nombre'].touched &&
+            formularioContenedor.controls['nombre'].invalid,
+          'is-valid':
+            formularioContenedor.controls['nombre'].touched &&
+            formularioContenedor.controls['nombre'].valid
+        }"
+        (keyup)="modificarCampoFormulario('subdominio', $event)"
+      />
+      <small
+        id="emailHelp"
+        class="form-text text-muted"
+        *ngIf="nombreEmpresa !== ''"
+      >
+        @if (visualizarCampoSubdominio) {
+        {{ formularioContenedor.get("subdominio")?.value.toLocaleLowerCase()
+        }}{{ dominioApp }}
+        } @else {
+        {{ nombreEmpresa.toLocaleLowerCase() }}{{ dominioApp }}
+        }
+        <a
+          class="btn btn-icon btn-link btn-sm btn-color-gray-500 btn-active-color-primary"
+          (click)="editarSubdominio()"
+          data-bs-toggle="tooltip"
+          data-bs-placement="right"
+          title="Editar"
+          ><i class="bi bi-pencil fs-4 me-2"></i
+        ></a>
+      </small>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'required',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+          control: formularioContenedor.controls['nombre']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'pattern',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.NOVALIDO' | translate,
+          control: formularioContenedor.controls['nombre']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'minlength',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMINIMO' | translate,
+          cantidadCaracteres: '3',
+          control: formularioContenedor.controls['nombre']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'maxlength',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+          cantidadCaracteres: '100',
+          control: formularioContenedor.controls['nombre']
+        }"
+      ></ng-container>
+    </div>
+  </div>
+  <div class="row mb-10" *ngIf="visualizarCampoSubdominio">
+    <div class="col-md-12 col-sm-12">
+      <label
+        translate="FORMULARIOS.TITULOS.CONTENEDOR.SUBDOMINIO"
+        class="form-label required"
+      ></label>
+      <div class="input-group mb-5">
+        <input
+          type="text"
+          formControlName="subdominio"
+          class="form-control bg-transparent"
+          autocomplete="off"
+          [ngClass]="{
+            'is-invalid':
+              formularioContenedor.controls['subdominio'].touched &&
+              formularioContenedor.controls['subdominio'].invalid,
+            'is-valid':
+              formularioContenedor.controls['subdominio'].touched &&
+              formularioContenedor.controls['subdominio'].valid
+          }"
+          (keyup)="cambiarTextoAMinusculas()"
+        />
+        <span class="input-group-text" id="basic-addon2">{{ dominioApp }}</span>
+      </div>
+
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'required',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+          control: formularioContenedor.controls['subdominio']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'pattern',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.NOVALIDO' | translate,
+          control: formularioContenedor.controls['subdominio']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'minlength',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMINIMO' | translate,
+          cantidadCaracteres: '3',
+          control: formularioContenedor.controls['subdominio']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'maxlength',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+          cantidadCaracteres: '20',
+          control: formularioContenedor.controls['subdominio']
+        }"
+      ></ng-container>
+      <div
+        *ngIf="
+          formularioContenedor.controls.subdominio?.touched &&
+          formularioContenedor.controls.subdominio?.hasError('EmpresaYaExiste')
+        "
+      >
+        <div class="fv-plugins-message-container">
+          <div class="fv-help-block">
+            <span
+              translate="FORMULARIOS.COMUNES.EMPRESA.NOMBREUSADO"
+              role="alert"
+            ></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-8">
+    <div class="col-md-6 col-sm-12">
+      <label
+        translate="FORMULARIOS.CAMPOS.COMUNES.CORREO"
+        class="form-label required"
+      ></label>
+      <input
+        formControlName="correo"
+        class="form-control bg-transparent"
+        type="email"
+        placeholder="empresa@example.com"
+        autocomplete="off"
+        [ngClass]="{
+          'is-invalid':
+            formularioContenedor.controls['correo'].touched &&
+            formularioContenedor.controls['correo'].invalid,
+          'is-valid':
+            formularioContenedor.controls['correo'].touched &&
+            formularioContenedor.controls['correo'].valid
+        }"
+        appInputValuecaseDirective
+        [appInputValueCase]="'minuscula'"
+      />
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'required',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+          control: formularioContenedor.controls['correo']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'maxlength',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+          cantidadCaracteres: '100',
+          control: formularioContenedor.controls['correo']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'pattern',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.TIPOCORREO' | translate,
+          control: formularioContenedor.controls['correo']
+        }"
+      ></ng-container>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <label
+        translate="FORMULARIOS.CAMPOS.COMUNES.TELEFONO"
+        class="form-label required"
+      ></label>
+      <input
+        formControlName="telefono"
+        class="form-control bg-transparent"
+        type="text"
+        placeholder="3145557869"
+        autocomplete="off"
+        [ngClass]="{
+          'is-invalid':
+            formularioContenedor.controls['telefono'].touched &&
+            formularioContenedor.controls['telefono'].invalid,
+          'is-valid':
+            formularioContenedor.controls['telefono'].touched &&
+            formularioContenedor.controls['telefono'].valid
+        }"
+      />
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'required',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+          control: formularioContenedor.controls['telefono']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'maxlength',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+          cantidadCaracteres: '50',
+          control: formularioContenedor.controls['telefono']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'pattern',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.NOVALIDO' | translate,
+          control: formularioContenedor.controls['telefono']
+        }"
+      ></ng-container>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="row container justify-content-center">
+      <div class="tabs">
+        <button
+          type="button"
+          class="tab-button"
+          (click)="cambiarTipoPlanes('F')"
+          [class.active]="activePlanTab() === 'F'"
+        >
+          <i class="bi bi-building me-1"></i>
+          Facturación
+        </button>
+        <button
+          [class.active]="activePlanTab() === 'E'"
+          type="button"
+          class="tab-button"
+          (click)="cambiarTipoPlanes('E')"
+        >
+          <i
+            class="bi bi-database me-1 icon"
+            [class.active]="'erp' === 'erp'"
+          ></i>
+          Planes ERP
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-10">
+    <div class="container py-5">
+      <div class="row g-4 justify-content-center">
+        <!-- Featured Card -->
+
+        @for (plan of planesAgrupadosPorTipo(); track $index) {
+        <div class="col-lg-3">
+          <div
+            class="card h-100 p-3 pricing-card position-relative overflow-hidden"
+            (click)="seleccionarPlan(plan)"
+            [class.active]="planSeleccionado === plan.id"
+          >
+            <div class="card-body p-5">
+              <h4 class="fw-bold mb-4 card__title">{{ plan.nombre }}</h4>
+              <div class="mb-4">
+                <span class="card__price"
+                  >${{ plan.precio | number : "1.0-0" }}</span
+                >
+                <span class="text-muted">/mes</span>
+              </div>
+              <ul class="list-unstyled mb-4">
+                @for (item of informacionPlanes[plan.id]; track $index) {
+                <li class="mb-3 d-flex align-items-center">
+                  <i class="bi bi-check-lg text-success me-2"></i>
+                  {{ item | translate }}
+                </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="fv-row d-flex"
+    [ngClass]="{
+      'justify-content-between': visualizarBtnAtras === true,
+      'justify-content-end': visualizarBtnAtras === false
+    }"
+  >
+    <a
+      translate="FORMULARIOS.BOTONES.COMUNES.ATRAS"
+      class="btn btn-secondary align-self-center"
+      [routerLink]="['../lista']"
+      *ngIf="visualizarBtnAtras"
+    >
+    </a>
+    <button
+      translate="FORMULARIOS.BOTONES.COMUNES.GUARDAR"
+      type="submit"
+      class="btn btn-primary"
+      type="submit"
+      #btnGuardar
+    ></button>
+  </div>
+</form>
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+  let-cantidadCaracteres="cantidadCaracteres"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        <span role="alert"> {{ message }} {{ cantidadCaracteres }} </span>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

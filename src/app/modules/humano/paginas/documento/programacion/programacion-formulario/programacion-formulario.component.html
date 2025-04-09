@@ -1,0 +1,549 @@
+<form [formGroup]="formularioProgramacion" (ngSubmit)="enviarFormulario()">
+  <app-comun-encabezado-formulario-nuevo></app-comun-encabezado-formulario-nuevo>
+  <app-card>
+    <section card-titulo>
+      <app-comun-titulo-accion [nombreModelo]="'programacion'"></app-comun-titulo-accion>
+    </section>
+    <section card-body>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.CAMPOS.GENERAL.PROGRAMACION.PAGOTIPO"
+          ></label>
+          <select
+            class="form-select"
+            formControlName="pago_tipo"
+            [ngClass]="{
+              'is-invalid':
+                formularioProgramacion.controls['pago_tipo'].touched &&
+                formularioProgramacion.controls['pago_tipo'].invalid,
+              'is-valid':
+                formularioProgramacion.controls['pago_tipo'].touched &&
+                formularioProgramacion.controls['pago_tipo'].valid
+            }"
+          >
+            <option value="">
+              {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" | translate }}
+            </option>
+            <option
+              *ngFor="let pagoTipo of arrPagoTipo"
+              [value]="pagoTipo.pago_tipo_id"
+            >
+              {{ pagoTipo.pago_tipo_nombre }}
+            </option>
+          </select>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioProgramacion.controls['pago_tipo']
+            }"
+          ></ng-container>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label
+            translate="FORMULARIOS.CAMPOS.COMUNES.NOMBRE"
+            class="form-label"
+          ></label>
+          <input
+            formControlName="nombre"
+            class="form-control"
+            type="text"
+            autocomplete="off"
+            [ngClass]="{
+              'is-invalid':
+                formularioProgramacion.controls['nombre'].touched &&
+                formularioProgramacion.controls['nombre'].invalid,
+              'is-valid':
+                formularioProgramacion.controls['nombre'].touched &&
+                formularioProgramacion.controls['nombre'].valid
+            }"
+          />
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'maxlength',
+              message:
+                'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+              cantidadCaracteres: '100',
+              control: formularioProgramacion.controls['nombre']
+            }"
+          ></ng-container>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.CAMPOS.GENERAL.CONTRATO.GRUPO"
+          ></label>
+          <select
+            class="form-select"
+            formControlName="grupo"
+            [ngClass]="{
+              'is-invalid':
+                formularioProgramacion.controls['grupo'].touched &&
+                formularioProgramacion.controls['grupo'].invalid,
+              'is-valid':
+                formularioProgramacion.controls['grupo'].touched &&
+                formularioProgramacion.controls['grupo'].valid
+            }"
+          >
+            <option value="">
+              {{ "FORMULARIOS.CAMPOS.COMUNES.SELECCIONAR" | translate }}
+            </option>
+            <option
+              *ngFor="let grupo of arrGrupo"
+              [value]="grupo.grupo_id"
+              [selected]="
+                grupo.grupo_id ===
+                formularioProgramacion.controls['grupo']!.value
+                  ? formularioProgramacion.controls['grupo']!.value
+                  : ''
+              "
+            >
+              {{ grupo.grupo_nombre }}
+            </option>
+          </select>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioProgramacion.controls['grupo']
+            }"
+          ></ng-container>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.CAMPOS.GENERAL.PROGRAMACION.FECHADESDE"
+          ></label>
+          <input
+            formControlName="fecha_desde"
+            class="form-control"
+            type="date"
+            [ngClass]="{
+              'is-invalid':
+                formularioProgramacion.controls['fecha_desde'].touched &&
+                formularioProgramacion.controls['fecha_desde'].invalid,
+              'is-valid':
+                formularioProgramacion.controls['fecha_desde'].touched &&
+                formularioProgramacion.controls['fecha_desde'].valid
+            }"
+          />
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioProgramacion.controls['fecha_desde']
+            }"
+          ></ng-container>
+          <div
+            *ngIf="
+              formularioProgramacion.controls.fechaDesde?.touched &&
+              formularioProgramacion.controls.fechaDesde?.hasError(
+                'fechaSuperiorNoValida'
+              )
+            "
+          >
+            <div class="fv-plugins-message-container">
+              <div class="fv-help-block">
+                <span
+                  translate="FORMULARIOS.VALIDACIONES.FACTURA.FECHASUPERIOAFECHAVENCIMINETO"
+                  role="alert"
+                >
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.CAMPOS.GENERAL.PROGRAMACION.FECHAHASTA"
+          ></label>
+          <input
+            formControlName="fecha_hasta"
+            class="form-control"
+            type="date"
+            (change)="
+              modificarCampoFormulario(
+                'fecha_hasta_periodo',
+                formularioProgramacion.controls['fecha_hasta'].value
+              )
+            "
+            [ngClass]="{
+              'is-invalid':
+                (formularioProgramacion.controls['fecha_hasta'].touched &&
+                  formularioProgramacion.controls['fecha_hasta'].invalid) ||
+                formularioProgramacion.errors?.fechaInvalida ||
+                formularioProgramacion.errors?.minimoDias,
+              'is-valid':
+                formularioProgramacion.controls['fecha_hasta'].touched &&
+                formularioProgramacion.controls['fecha_hasta'].valid
+            }"
+          />
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioProgramacion.controls['fecha_hasta']
+            }"
+          ></ng-container>
+          <div *ngIf="formularioProgramacion.errors?.fechaInvalida">
+            <div class="fv-plugins-message-container">
+              <div class="fv-help-block">
+                <span role="alert">
+                  La fecha desde no puede ser mayor que la fecha hasta.
+                </span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="formularioProgramacion.errors?.minimoDias">
+            <div class="fv-plugins-message-container">
+              <div class="fv-help-block">
+                <span
+                  *ngIf="grupoSeleccionado?.grupo_periodo_dias"
+                  role="alert"
+                >
+                  Fecha hasta debe contener
+                  {{ grupoSeleccionado?.grupo_periodo_dias }} días a partir de
+                  la fecha desde.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-md-12 col-sm-12">
+          <label
+            class="form-label"
+            translate="FORMULARIOS.CAMPOS.FACTURA.COMENTARIO"
+          ></label>
+          <textarea
+            formControlName="comentario"
+            class="form-control"
+            id="exampleFormControlTextarea1"
+            rows="3"
+            [ngClass]="{
+              'is-invalid':
+                formularioProgramacion.controls['comentario'].touched &&
+                formularioProgramacion.controls['comentario'].invalid,
+              'is-valid':
+                formularioProgramacion.controls['comentario'].touched &&
+                formularioProgramacion.controls['comentario'].valid
+            }"
+          ></textarea>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'maxlength',
+              message:
+                'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+              cantidadCaracteres: '500',
+              control: formularioProgramacion.controls['comentario']
+            }"
+          ></ng-container>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'pago_horas'"
+              formControlName="pago_horas"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="pago_horas"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.HORAS"
+            >
+            </label>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'descuento_salud'"
+              formControlName="descuento_salud"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="descuento_salud"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.DESCUENTOSALUD"
+            >
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'pago_auxilio_transporte'"
+              formControlName="pago_auxilio_transporte"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="pago_auxilio_transporte"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.AUXILIOTRANSPORTE"
+            >
+            </label>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'descuento_pension'"
+              formControlName="descuento_pension"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="descuento_pension"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.DESCUENTOPENSION"
+            >
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'adicional'"
+              formControlName="adicional"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="adicional"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.ADICIONAL"
+            >
+            </label>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'descuento_fondo_solidaridad'"
+              formControlName="descuento_fondo_solidaridad"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="descuento_fondo_solidaridad"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.FONDO"
+            >
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'pago_vacacion'"
+              formControlName="pago_vacacion"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="pago_vacacion"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.VACACION"
+            >
+            </label>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'descuento_retencion_fuente'"
+              formControlName="descuento_retencion_fuente"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="descuento_retencion_fuente"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.RETENCION"
+            >
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'pago_incapacidad'"
+              formControlName="pago_incapacidad"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="pago_incapacidad"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.INCAPACIDAD"
+            >
+            </label>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'descuento_credito'"
+              formControlName="descuento_credito"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="descuento_credito"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.DESCUENTOCREDITO"
+            >
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'pago_licencia'"
+              formControlName="pago_licencia"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="pago_licencia"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.LICENCIA"
+            >
+            </label>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'descuento_embargo'"
+              formControlName="descuento_embargo"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="descuento_embargo"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.DESCUENTOEMBARGO"
+            >
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'pago_prima'"
+              formControlName="pago_prima"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="pago_prima"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.PRIMA"
+            >
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'pago_cesantia'"
+              formControlName="pago_cesantia"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="pago_cesantia"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.CESANTIA"
+            >
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6">
+          <div class="form-check form-check-custom form-check-solid">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value="1"
+              [id]="'pago_interes'"
+              formControlName="pago_interes"
+            />
+            <label
+              class="form-check-label text-gray-700"
+              for="pago_interes"
+              translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.INTERES"
+            >
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+  </app-card>
+</form>
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+  let-cantidadCaracteres="cantidadCaracteres"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        <span role="alert"> {{ message }} {{ cantidadCaracteres }} </span>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

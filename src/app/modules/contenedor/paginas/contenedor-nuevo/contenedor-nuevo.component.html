@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-xl-12">
+    <app-card>
+      <section card-titulo>
+        {{ "FORMULARIOS.TITULOS.CONTENEDOR.NUEVO" | translate }}
+      </section>
+      <section card-body>
+        <app-contenedor-formulario
+          [informacionContenedor]="informacionContenedor"
+          (dataFormulario)="enviarFormulario($event)"
+        ></app-contenedor-formulario>
+      </section>
+    </app-card>
+  </div>
+</div>
+<div *ngIf="procesando">
+  <app-secuencial-loader
+    [texts]="[
+      'Estamos creando su contenedor...',
+      'Creando bases de datos...',
+      'Configurando datos iniciales...',
+      'Configurando dominio...',
+      'Ya estamos terminando...',
+    ]"
+    [interval]="8000"
+  >
+  </app-secuencial-loader>
+</div>

@@ -1,0 +1,23 @@
+<ng-container *ngIf="visualizarMenuApps">
+  <div class="menu-item me-lg-1">
+    <a
+      class="menu-link py-3"
+      [ngClass]="{'active': ruta === 'Inicio'}"
+      routerLinkActive="menu-here"
+      routerLink="/general"
+      (click)="seleccionarMenu('general')"
+      ><span class="menu-title" translate="MENU.DASHBOARD"></span
+    ></a>
+  </div>
+  <br>
+  <div class="menu-item me-lg-1" *ngFor="let item of arrMenuApps">
+    <a
+      class="menu-link py-3 menu-here"
+      [ngClass]="{'active': item === ruta}"
+      routerLinkActive="menu-here"
+      routerLink="/{{ item | lowercase }}"
+      (click)="seleccionarMenu(item)"
+      ><span class="menu-title" [translate]="'MENU.TITULOS.'+(item | uppercase)"></span></a
+    >
+  </div>
+</ng-container>

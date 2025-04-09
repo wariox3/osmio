@@ -1,0 +1,22 @@
+<div class="table-responsive-sm">
+  <table id="tableDetalles" class="table table-bordered table-row-gray-500">
+    <thead>
+      <tr>
+        <th class="bg-gray-100">Comprobante</th>
+        <th class="bg-gray-100">Número</th>
+        <th class="bg-gray-100">Cuenta</th>
+        <th class="bg-gray-100">Inconsistencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (inconsistencia of inconsistencias(); track $index) {
+        <tr>
+          <td>{{ inconsistencia.comprobante_id }}</td>
+          <td>{{ inconsistencia.numero }}</td>
+          <td>{{ inconsistencia.cuenta_id }}</td>
+          <td>{{ inconsistencia.inconsistencia }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

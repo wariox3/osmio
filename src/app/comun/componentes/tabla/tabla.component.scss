@@ -1,0 +1,76 @@
+.container-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 0px;
+  grid-auto-flow: row;
+  grid-template-areas: "paginacion botones";
+  margin-bottom: 1.25rem !important;
+}
+
+.paginacion {
+  grid-area: paginacion;
+}
+
+.botones {
+  grid-area: botones;
+  align-self: end;
+  place-self: end; /* Alinea al final verticalmente y al centro horizontalmente */
+}
+
+@media (max-width: 768px) { /* Ajusta el ancho según tus necesidades */
+  .container-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "paginacion"
+      "botones";
+    grid-auto-flow: column;
+  }
+}
+
+.dropdown-menu {
+  max-height: 280px;
+  overflow-y: auto;
+  width: 250px;
+}
+
+.form-control {
+  text-transform: uppercase;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+.hover-primary {
+  transition: 1s;
+  &:hover {
+    color: rgb(0, 158, 247) !important;
+    transition: 1s;
+  }
+}
+
+.cargando {
+  z-index: 10;
+  top: 10%;
+}
+
+.contenedor-btn-group {
+  border: 1px solid var(--bs-border-color) !important;
+}
+
+.ki-duotone,
+.ki-outline,
+.ki-solid,
+.fa-regular,
+.fa-solid {
+  font-size: 1.8rem;
+  width: 20.484px;
+  height: 23.406px;
+}
+
+td {
+  vertical-align: middle;
+}
+
+th {
+  background-color: var(--bs-gray-100);
+}

@@ -1,0 +1,369 @@
+<div class="row">
+  <!--begin::Col-->
+  <div class="col-12">
+    <!--begin::Tables Widget 9-->
+    <div class="card shadow-sm">
+      <!--begin::Header-->
+      <div class="card-header" appAnimationFadeinUp>
+        <div class="card-title m-0">
+          <h3
+            translate="FORMULARIOS.TITULOS.CONTENEDOR.TITULO"
+            class="fw-bolder m-0"
+          ></h3>
+        </div>
+        <button
+          translate="FORMULARIOS.BOTONES.COMUNES.NUEVO"
+          class="btn btn-primary align-self-center"
+          [routerLink]="['../nuevo']"
+          [disabled]="!habilitarContenedores"
+        ></button>
+      </div>
+
+      <div class="card-body">
+        <div class="mb-3">
+          <div class="position-relative" style="width: 100%; max-width: 23rem">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar por nombre..."
+              [(ngModel)]="searchTerm"
+            />
+            <div class="position-absolute translate-middle-y top-50 end-0 me-3">
+              <i class="bi bi-search fs-2"></i>
+            </div>
+          </div>
+        </div>
+        <!--begin::Table container-->
+        <div class="table-responsive">
+          <!--begin::Table-->
+          <table class="table table-hover">
+            <!--begin::Table head-->
+            @if (contenedores().length > 0) {
+              <thead>
+                <tr class="bg-gray-100">
+                  <th
+                    class="min-w-120px text-center"
+                    translate="FORMULARIOS.TITULOS.COMUNES.NOMBRE"
+                  ></th>
+                  <th
+                    class="min-w-150px text-center"
+                    translate="FORMULARIOS.TITULOS.COMUNES.PLAN"
+                  ></th>
+                  <th
+                    translate="FORMULARIOS.TITULOS.COMUNES.USUARIOS"
+                    class="min-w-100px text-center"
+                  ></th>
+                  <th colspan="2"></th>
+                </tr>
+              </thead>
+            }
+            <tbody>
+              <ng-container
+                *ngIf="contenedores().length > 0; else sinContenedores"
+              >
+                <tr
+                  *ngFor="let contenedor of filteredContenedores; let i = index"
+                  appAnimationFadeinUp
+                  [animacionDelay]="i + 1"
+                  style="height: calc(82px - 0.6rem) !important"
+                >
+                  <td class="px-2">
+                    <div class="d-flex align-items-center gap-3">
+                      @if (contenedor.imagen) {
+                        <img
+                          [src]="
+                            !contenedor.imagen.includes('logo_defecto')
+                              ? getImageUrl(contenedor.imagen)
+                              : contenedor.imagen
+                          "
+                          alt="Error al cargar logo"
+                          width="120"
+                          height="120"
+                          style="min-width: 120px"
+                          class="img-thumbnail"
+                        />
+                      }
+                      <div class="d-flex flex-column gap-2">
+                        <span class="text-dark fw-bolder fs-6">{{
+                          contenedor.nombre
+                        }}</span>
+                        <span>{{ contenedor.subdominio }}{{ dominioApp }}</span>
+                        <div>
+                          <span class="badge badge-light-primary fs-8 fw-bold">
+                            {{ contenedor.rol }}
+                          </span>
+                        </div>
+                        @if (contenedor.acceso_restringido) {
+                          <span
+                            class="badge badge-light-danger fs-8 fw-bold text-wrap text-start"
+                          >
+                            El acceso a este contenedor está temporalmente
+                            suspendido. Por favor, revise su cuenta o la del
+                            propietario para solucionar el inconveniente
+                          </span>
+                        }
+                      </div>
+                    </div>
+                  </td>
+                  <td class="w-150px">
+                    <div
+                      class="h-100 d-flex flex-column justify-content-center"
+                    >
+                      <span class="badge badge-light-info fs-8 fw-bold p-3">
+                        <i class="bi bi-briefcase fs-2 text-info me-2"></i>
+                        {{ contenedor.plan_nombre }}</span
+                      >
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="h-100 d-flex justify-content-center align-items-center"
+                    >
+                      <i class="bi bi-people me-2 fs-3 text-dark"></i>
+
+                      {{ contenedor.usuarios }} / {{ contenedor.usuarios_base }}
+                    </div>
+                  </td>
+                  <td class="w-50px">
+                    <div
+                      class="h-100 d-flex flex-column justify-content-center"
+                    >
+                      @if (visualizarLoader[i]) {
+                        <button
+                          class="btn btn-sm btn-bg-primary btn-color-white"
+                          type="button"
+                          disabled
+                        >
+                          <span
+                            class="spinner-border spinner-border-sm me-1"
+                            aria-hidden="true"
+                          ></span>
+                          <span
+                            role="status"
+                            translate="LISTAS.COMUNES.CARGANDO"
+                          ></span>
+                        </button>
+                      } @else {
+                        <button
+                          translate="FORMULARIOS.BOTONES.CONTENEDOR.CONECTAR"
+                          class="btn btn-bg-primary btn-color-white"
+                          (click)="seleccionarEmpresa(contenedor.subdominio, i)"
+                          [disabled]="
+                            contenedor.acceso_restringido &&
+                            contenedor.rol !== 'control'
+                          "
+                        ></button>
+                      }
+                    </div>
+                  </td>
+                  <td class="w-50px">
+                    <div
+                      class="h-100 d-flex flex-column justify-content-center"
+                    >
+                      <div
+                        ngbDropdown
+                        container="body"
+                        class="d-inline-block"
+                        display="dynamic"
+                        *ngIf="contenedor.rol === 'propietario'"
+                      >
+                        <button
+                          type="button"
+                          class="btn btn-link text-hover-primary"
+                          id="dropdownBasic1"
+                          ngbDropdownToggle
+                        >
+                          <i class="bi bi-gear fs-2x"></i>
+                        </button>
+                        <div
+                          class="menu menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary w-200px py-3"
+                          ngbDropdownMenu
+                          aria-labelledby="dropdownBasic1"
+                        >
+                          <div class="menu-item px-3">
+                            <a
+                              class="menu-link px-3 cursor-pointer"
+                              (click)="
+                                abrirModal(
+                                  contentModalInvitados,
+                                  contenedor.contenedor_id,
+                                  contenedor
+                                )
+                              "
+                            >
+                              <i class="bi bi-person-plus me-2 fs-3"></i>
+                              {{
+                                "FORMULARIOS.BOTONES.CONTENEDOR.INVITACION"
+                                  | translate
+                              }}
+                            </a>
+                          </div>
+                          <div class="separator my-2"></div>
+                          <div class="menu-item px-3">
+                            <a
+                              class="menu-link px-3 cursor-pointer"
+                              (click)="
+                                abrirModal(
+                                  ModalEditar,
+                                  contenedor.contenedor_id,
+                                  contenedor
+                                )
+                              "
+                            >
+                              <i class="bi bi-box2 me-2 fs-3"></i>
+                              {{
+                                "FORMULARIOS.TITULOS.COMUNES.MENU.CONTENEDOR"
+                                  | translate
+                              }}
+                            </a>
+                          </div>
+                          <div class="separator my-2"></div>
+                          <div class="menu-item px-3">
+                            <a
+                              class="menu-link px-3 cursor-pointer bg-hover-light-danger text-danger"
+                              (click)="
+                                eliminarEmpresa(
+                                  contenedor.subdominio,
+                                  contenedor.contenedor_id
+                                )
+                              "
+                            >
+                              <i class="bi bi-trash3 text-danger me-2 fs-3"></i>
+                              {{
+                                "FORMULARIOS.BOTONES.COMUNES.ELIMINAR"
+                                  | translate
+                              }}
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+              <ng-template #sinContenedores>
+                <ng-container *ngIf="cargandoContederes; else mensaje">
+                  <tr>
+                    <td style="width: 120px">
+                      <app-comun-skeleton-loading
+                        [height]="120"
+                        [width]="120"
+                      />
+                    </td>
+                    <td>
+                      <app-comun-skeleton-loading [height]="20" [width]="200" />
+                    </td>
+                    <td class="w-150px">
+                      <app-comun-skeleton-loading [height]="20" [width]="150" />
+                    </td>
+                    <td class="w-150px">
+                      <app-comun-skeleton-loading [height]="20" [width]="150" />
+                    </td>
+                  </tr>
+                </ng-container>
+                <ng-template #mensaje>
+                  <div
+                    class="d-flex justify-content-between bgi-no-repeat bgi-size-cover bgi-position-x-center pb-0"
+                    style="
+                      background-position: 100% 50%;
+                      background-image: url(&quot;../../../../assets/media/stock/900x600/42.png&quot;);
+                    "
+                  >
+                    <!--begin::Illustration-->
+                    <img
+                      class="mx-auto theme-light-show p-0 mx-2 d-none d-sm-block"
+                      src="assets/media/illustrations/sigma-1/17.png"
+                      alt=""
+                      height="250"
+                      width="250"
+                    />
+                    <img
+                      class="mx-auto h-150px h-lg-200px theme-dark-show d-none d-sm-block"
+                      src="assets/media/illustrations/sigma-1/17-dark.png"
+                      alt=""
+                    />
+                    <!--end::Illustration-->
+                    <!--begin::Wrapper-->
+                    <div>
+                      <!--begin::Title-->
+                      <div class="fs-2hx fw-bold text-gray-800">
+                        <span class="me-2"> ¿Qué es un contenedor? </span>
+                        <br />
+                        <span
+                          class="fw-semibold text-gray-600 fs-6 mb-8 d-block"
+                        >
+                          Imagina un contenedor como un espacio que va a
+                          almacenar la información de tu empresa y todas las
+                          aplicaciones que usas (ventas / facturación, compras,
+                          contabilidad, nómina). Invita a otros usuarios y
+                          viceversa para que hagan parte de estos espacios e
+                          interactúen con la información. Puedes escoger
+                          diferentes planes de pago para tu contenedor, según
+                          tus necesidades, con diferentes características porque
+                          vamos al ritmo de tu crecimiento.  Pero eso sí, aquí
+                          NO pagas por ver, somos claros y te damos una
+                          probadita gratis.
+                        </span>
+                      </div>
+                      <!--end::Title-->
+                    </div>
+                    <!--begin::Wrapper-->
+                  </div>
+                </ng-template>
+              </ng-template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!--begin::Body-->
+    </div>
+    <!--end::Tables Widget 9-->
+  </div>
+  <!--end::Col-->
+</div>
+
+@if (procesando) {
+  <div class="fake-loading">
+    <span
+      translate="FORMULARIOS.MENSAJES.CONTENEDOR.ELIMINANDOCONTENDOR"
+    ></span>
+  </div>
+}
+
+<!--end::Alert-->
+<ng-template #contentModalInvitados let-modal>
+  <div class="modal-header">
+    <h3 translate="FORMULARIOS.BOTONES.CONTENEDOR.INVITACION"></h3>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-contenedor-invitacion
+      [contenedorCodigo]="contenedorId"
+      [contenedor]="contenedor"
+    ></app-contenedor-invitacion>
+  </div>
+</ng-template>
+
+<!--end::Alert-->
+<ng-template #ModalEditar let-modal>
+  <div class="modal-header">
+    <h3 translate="FORMULARIOS.TITULOS.COMUNES.MENU.CONTENEDOR"></h3>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-contenedor-editar
+      [contenedor_id]="contenedorId"
+      (emitirActualizacion)="consultarLista()"
+    ></app-contenedor-editar>
+  </div>
+</ng-template>

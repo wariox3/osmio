@@ -1,0 +1,82 @@
+<form [formGroup]="formularioSede" (ngSubmit)="enviarFormulario()">
+  <app-comun-encabezado-formulario-nuevo
+    [estadoAprobado]="false"
+  ></app-comun-encabezado-formulario-nuevo>
+  <app-card>
+    <section card-titulo>
+      <app-comun-titulo-accion
+        [nombreModelo]="'sede'"
+      ></app-comun-titulo-accion>
+    </section>
+    <section card-body>
+      <div class="row mb-5">
+        <div class="col-md-6 col-sm-12">
+          <label
+            translate="FORMULARIOS.CAMPOS.COMUNES.NOMBRE"
+            class="form-label required"
+          ></label>
+          <input
+            formControlName="nombre"
+            class="form-control bg-transparent"
+            type="text"
+            autocomplete="off"
+            [ngClass]="{
+              'is-invalid':
+                formularioSede.controls['nombre'].touched &&
+                formularioSede.controls['nombre'].invalid,
+              'is-valid':
+                formularioSede.controls['nombre'].touched &&
+                formularioSede.controls['nombre'].valid,
+            }"
+          />
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioSede.controls['nombre'],
+            }"
+          ></ng-container>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'maxlength',
+              message:
+                'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+              cantidadCaracteres: '100',
+              control: formularioSede.controls['nombre'],
+            }"
+          ></ng-container>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label
+            translate="FORMULARIOS.CAMPOS.COMUNES.GRUPO"
+            class="form-label"
+          ></label>
+          <app-seleccionar-grupo
+            (selectChange)="onSeleccionarGrupoChange($event)"
+            [valorInicial]="formularioSede.get('grupo')?.value"
+            [grande]="true"
+          ></app-seleccionar-grupo>
+        </div>
+      </div>
+    </section>
+  </app-card>
+</form>
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+  let-cantidadCaracteres="cantidadCaracteres"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        <span role="alert"> {{ message }} {{ cantidadCaracteres }} </span>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

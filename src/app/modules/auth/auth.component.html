@@ -1,0 +1,86 @@
+<app-btn-whatsapp />
+
+<div class="d-flex flex-column flex-lg-row flex-column-fluid">
+  <!--begin::Body-->
+  <div
+    class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1"
+  >
+    <div class="d-flex flex-center flex-column flex-lg-row-fluid">
+      <div class="p-10">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+    <div class="d-flex flex-stack flex-wrap px-10 mx-auto">
+      <div class="d-flex fw-semibold text-primary fs-base">
+        <div ngbDropdown class="me-10">
+          <button
+            ngbDropdownToggle
+            class="btn btn-flex btn-lik btn-color-gray-700 btn-active-color-primary rotate fs-base"
+            data-kt-menu-trigger="click"
+            data-kt-menu-placement="bottom-start"
+            data-kt-menu-offset="0px, 0px"
+          >
+            {{ language.name }}
+            <img
+              class="w-15px h-15px rounded-1 ms-2"
+              [src]="language.flag"
+              alt="metronic"
+            />
+          </button>
+          <div
+            ngbDropdownMenu
+            class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px py-4 fs-7"
+            data-kt-menu="true"
+            id="kt_auth_lang_menu"
+          >
+            <div
+              *ngFor="let l of langs"
+              class="menu-item px-3 cursor-pointer"
+              (click)="selectLanguage(l.lang)"
+              ngbDropdownItem
+            >
+              <a
+                class="menu-link d-flex px-5"
+                [ngClass]="l.lang === language.lang ? 'active' : ''"
+              >
+                <span class="symbol symbol-20px me-4">
+                  <img class="rounded-1" [src]="l.flag" alt="metronic" />
+                </span>
+                {{ l.name }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="d-flex justify-content-center fw-semibold text-primary fs-base my-3"
+      >
+        <a
+          translate="FORMULARIOS.TITULOS.COMUNES.TERMINOS"
+          routerLink="/terminos"
+          class="px-5"
+          target="_blank"
+        ></a>
+
+        <a
+          translate="FORMULARIOS.TITULOS.COMUNES.PLAN"
+          href="#"
+          routerLink="/inicio"
+          fragment="pricing"
+          class="px-5"
+          target="_blank"
+        ></a>
+
+        <a
+          translate="FORMULARIOS.TITULOS.COMUNES.CONTACTO"
+          routerLink="/inicio"
+          fragment="contacto"
+          class="px-5"
+          target="_blank"
+        ></a>
+      </div>
+    </div>
+    <!--end::Footer-->
+  </div>
+  <!--end::Body-->
+</div>

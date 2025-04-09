@@ -1,0 +1,385 @@
+<section class="container-grid">
+  <section class="row paginacion">
+    <div class="col-md-5 col-sm-12 d-flex align-items-center gap-3">
+      <button
+        class="btn btn-sm btn-icon btn-secondary"
+        (click)="disminuirDesplazamiento()"
+        [disabled]="deshabilitarBotonIzquierda()"
+      >
+        <i class="bi bi-arrow-left fs-3 cursor-pointer fs-1 text-gray-900"
+          ><span class="path1"></span><span class="path2"></span
+          ><span class="path3"></span><span class="path4"></span
+        ></i>
+      </button>
+
+      <input
+        type="text"
+        class="form-control form-control-sm w-100px"
+        [value]="lado + 1 + '-' + al"
+        (keyup.enter)="calcularValorMostrar($event)"
+      />
+      <span>de</span>
+      <span>{{ cantidad_registros }}</span>
+      <button
+        class="btn btn-sm btn-icon btn-secondary"
+        (click)="aumentarDesplazamiento()"
+        [disabled]="deshabilitarBotonDerecha()"
+      >
+        <i class="bi bi-arrow-right fs-3 cursor-pointer fs-1 text-gray-900"
+          ><span class="path1"></span><span class="path2"></span
+          ><span class="path3"></span><span class="path4"></span
+        ></i>
+      </button>
+    </div>
+  </section>
+  <section class="botones d-flex gap-2">
+    <div
+      class="btn-group btn-group-sm contenedor-btn-group"
+      data-toggle="buttons"
+      [ngClass]="{ 'btn-toolbar': btnGrupoResponsive }"
+    >
+      @if (botonesExtras.length > 0) {
+        @for (boton of botonesExtras; track $index) {
+          <button
+            class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
+            (click)="botonExtra(boton)"
+          >
+            {{ boton.nombreBoton }}
+          </button>
+        }
+      }
+      @if (visualizarBtnImportar) {
+        @if (ubicacion === "documento") {
+          <app-importar
+            modelo="{{ modelo }}"
+            [esBotonFinal]="botonesExtras.length ? true : false"
+            (emitirDetallesAgregados)="solicitarConsultarTabla()"
+          ></app-importar>
+        }
+        @if (ubicacion === "administrador" || ubicacion === "independiente") {
+          <app-importar-administrador
+            [importarConfig]="importarConfig"
+            role="group"
+            (emitirDetallesAgregados)="solicitarConsultarTabla()"
+          ></app-importar-administrador>
+        }
+      }
+      @if (visualizarBtnExportar) {
+        <div class="btn-group btn-group-sm" ngbDropdown role="group">
+          <button
+            type="button"
+            class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
+            ngbDropdownToggle
+          >
+            {{ "FORMULARIOS.BOTONES.COMUNES.EXPORTAR" | translate }}
+          </button>
+          <div class="dropdown-menu p-2" ngbDropdownMenu>
+            <button ngbDropdownItem (click)="exportarExcel()">
+              {{ "FORMULARIOS.BOTONES.COMUNES.EXCEL" | translate }}
+            </button>
+            @if (visualizarBtnExportarZip) {
+              <button ngbDropdownItem (click)="exportarZip()">
+                {{ "FORMULARIOS.BOTONES.COMUNES.ZIP" | translate }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+      @if (visualizarBtnNuevo) {
+        <button
+          (click)="navegarNuevo()"
+          class="btn btn-sm btn-primary"
+          translate="FORMULARIOS.BOTONES.COMUNES.NUEVO"
+        ></button>
+      }
+      @if (visualizarBtnColumnas) {
+        <div class="btn-group btn-group-sm" ngbDropdown role="group">
+          <button
+            type="button"
+            class="btn btn-sm btn-flex bg-body btn-color-gray-700 btn-active-primary btn-text-primary"
+            ngbDropdownToggle
+          >
+            {{ "FORMULARIOS.TITULOS.COMUNES.COLUMNAS" | translate }}
+          </button>
+          <div class="dropdown-menu p-2" ngbDropdownMenu>
+            <div>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                placeholder="Buscar"
+                (keyup)="filterCampos($event)"
+              />
+            </div>
+            <div class="dropdown-divider my-2"></div>
+            <div>
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="dropdownCheck"
+                  (change)="visualizarColumnas()"
+                />
+                <label
+                  class="form-check-label text-gray-700"
+                  for="dropdownCheck"
+                >
+                  seleccionar todos
+                </label>
+              </div>
+            </div>
+            <div class="dropdown-divider my-2"></div>
+            @for (item of columnas; track item.nombre; let i = $index) {
+              <div class="mb-2">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    [id]="item.nombre"
+                    [checked]="item.visibleTabla ? true : false"
+                    (click)="agregarColumna(item.nombre)"
+                    [disabled]="item.nombre === 'ID'"
+                  />
+                  <label
+                    class="form-check-label text-gray-700"
+                    [for]="item.nombre"
+                  >
+                    {{
+                      "LISTAS." +
+                        (_tipo | uppercase) +
+                        "." +
+                        (item.nombre | uppercase) | translate
+                    }}
+                  </label>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      @if (visualizarBtnEliminar) {
+        <button
+          type="button"
+          (click)="eliminarRegistros()"
+          class="btn btn-sm btn-danger"
+          translate="FORMULARIOS.BOTONES.COMUNES.ELIMINAR"
+        ></button>
+      }
+    </div>
+    <div class="btn-group btn-group-sm contenedor-btn-group">
+      <ng-content select="[botones-extra-derecha]"></ng-content>
+    </div>
+  </section>
+</section>
+
+<div class="d-flex justify-content-end gap-2">
+  <div class="col-md-5 col-sm-12 d-flex justify-content-end">
+    <div
+      class="btn-group contenedor-btn-group"
+      data-toggle="buttons"
+      [ngClass]="{ 'btn-toolbar': btnGrupoResponsive }"
+    ></div>
+  </div>
+</div>
+<div class="table-responsive" [ngClass]="{ 'table-loading': cargando }">
+  <!-- @if(cargando) {
+  <div class="table-loading-message cargando">
+    {{ "LISTAS.COMUNES.CARGANDO" | translate }}...
+  </div>
+  } -->
+  <table
+    class="table table-hover table-bordered table-rounded border gy-2 gs-2"
+  >
+    <thead>
+      <tr class="fw-bold text-gray-800">
+        @for (item of columnasVibles; track item.nombre) {
+          <th
+            (click)="
+              item.ordenable &&
+                orderPor(item.nombre, columnasVibles.indexOf(item))
+            "
+            [ngClass]="obtenerClasesCss(item)"
+            [ngStyle]="item.stylePersonalizado ? item.stylePersonalizado : null"
+          >
+            <div
+              placement="top"
+              [ngbTooltip]="
+                'LISTAS.' + (_tipo | uppercase) + '.' + item.toolTip | translate
+              "
+              [disableTooltip]="!item.toolTip?.length"
+            >
+              <div class="d-flex justify-content-between">
+                <div style="flex: 1; text-align: center">
+                  {{
+                    "LISTAS." +
+                      (_tipo | uppercase) +
+                      "." +
+                      (item.nombreAbreviado
+                        ? (item.nombreAbreviado | uppercase)
+                        : (item.nombre | uppercase)) | translate
+                  }}
+                </div>
+                @if (item.ordenable) {
+                  <div>
+                    @if (
+                      this.ordenadoTabla === item.nombre.toLowerCase() ||
+                      this.ordenadoTabla === "-" + item.nombre.toLowerCase()
+                    ) {
+                      @if (this.ordenadoTabla === item.nombre.toLowerCase()) {
+                        <i class="ki-outline ki-arrow-up fs-2"></i>
+                      } @else {
+                        <i class="ki-outline ki-arrow-down fs-2"></i>
+                      }
+                    } @else {
+                      <i class="ki-outline ki-arrow-up-down fs-2"></i>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          </th>
+        }
+        @if (visualizarColumnaEditar) {
+          <th></th>
+        }
+        @if (visualizarColumnaDetalle) {
+          <th></th>
+        }
+        @if (visualizarColumnaSeleccionar) {
+          <th class="text-center">
+            <label [for]="selectAll">
+              <i
+                class="cursor-pointer"
+                [ngClass]="
+                  checkboxSelectAll.checked
+                    ? 'fa-solid fa-square-check text-danger'
+                    : 'fa-regular fa-square text-gray-500'
+                "
+              >
+                <span class="path1"></span>
+                <span class="path2"></span>
+              </i>
+
+              <input
+                class="d-none"
+                type="checkbox"
+                #checkboxSelectAll
+                [id]="selectAll"
+                [checked]="selectAll"
+                [value]="selectAll"
+                (change)="toggleSelectAll($event)"
+              />
+            </label>
+          </th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of datosFiltrados; track item["id"].valor; let i = $index) {
+        <tr appAnimationFadeinUp>
+          @for (key of item | keys; track key) {
+            <td
+              [ngClass]="{
+                'text-end':
+                  item[key].aplicaFormatoNumerico ||
+                  item[key].alinearAlaIzquierda,
+                'text-center': item[key].campoTipo === 'Booleano',
+              }"
+            >
+              @if (visualizarIdModal) {
+                @switch (key) {
+                  @case ("id") {
+                    <button
+                      (click)="
+                        abrirModal(modalDocumentoDetalle, item[key].valor)
+                      "
+                      class="btn btn-sm"
+                    >
+                      {{ getTipoDato(item[key].valor, item[key]) }}
+                    </button>
+                  }
+                  @default {
+                    {{ getTipoDato(item[key].valor, item[key]) }}
+                  }
+                }
+              } @else {
+                {{ getTipoDato(item[key].valor, item[key]) }}
+              }
+            </td>
+          }
+          @if (visualizarColumnaEditar) {
+            <td class="w-45px">
+              @if (visualizarBtnEstado(item)) {
+                <label
+                  (click)="navegarEditar(item['id'].valor)"
+                  class="cursor-pointer"
+                >
+                  <i class="ki-duotone ki-notepad-edit hover-primary">
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </i>
+                </label>
+              }
+            </td>
+          }
+          @if (visualizarColumnaDetalle) {
+            <td class="w-45px">
+              <label
+                (click)="navegarDetalle(item['id'].valor)"
+                class="cursor-pointer"
+              >
+                <i class="ki-duotone ki-document hover-primary">
+                  <span class="path1"></span>
+                  <span class="path2"></span>
+                </i>
+              </label>
+            </td>
+          }
+          @if (visualizarColumnaSeleccionar) {
+            <td class="w-20px">
+              <label [for]="item['id'].valor">
+                <i
+                  class="cursor-pointer"
+                  [ngClass]="
+                    checked.checked
+                      ? 'fa-solid fa-square-check text-danger'
+                      : 'fa-regular fa-square text-gray-500'
+                  "
+                >
+                  <span class="path1"></span>
+                  <span class="path2"></span>
+                </i>
+                <input
+                  #checked
+                  class="d-none"
+                  type="checkbox"
+                  [id]="item['id'].valor"
+                  [value]="item['id'].valor"
+                  (change)="agregarRegistrosEliminar(item['id'].valor)"
+                  [checked]="estoyEnListaEliminar(item['id'].valor)"
+                />
+              </label>
+            </td>
+          }
+        </tr>
+      }
+      <ng-content select="[tr-custom-end-table]"></ng-content>
+    </tbody>
+  </table>
+</div>
+
+<app-spinner-loader [mostrarCargando]="cargando"></app-spinner-loader>
+
+<ng-template #modalDocumentoDetalle let-modal>
+  <div class="modal-header">
+    <h3>Documento {{ registroSeleccionadoId() }}</h3>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-modal-documento-detalles [documentoId]="registroSeleccionadoId()" />
+  </div>
+</ng-template>

@@ -1,0 +1,77 @@
+<span (click)="abirModal(content)" class="boton-ver-mas">{{
+  "FORMULARIOS.TITULOS.COMUNES.VERMAS" | translate
+}}</span>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      Buscar {{ consultarModelo.substring(3) | lowercase }}
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-base-filtro
+      (emitirFiltros)="obtenerFiltros($event)"
+      [persistirFiltros]="false"
+      [modeloPersonalizado]="consultarModelo.substring(3)"
+      [_tipo]="'DOCUMENTO'"
+    ></app-base-filtro>
+
+    <div class="table-responsive table-loading mt-5">
+      <table
+        class="table table-hover table-bordered table-rounded border gy-2 gs-2"
+      >
+        <thead>
+          <tr class="fw-bold fs-6 text-gray-800 bg-gray-100">
+            <th
+              *ngFor="let campo of campoLista; let i = index"
+              class="cursor-pointer user-select-none"
+            >
+              <div class="d-flex justify-content-between">
+                <span>
+                  {{
+                    "LISTAS." +
+                      (consultarModelo.substring(3) | uppercase) +
+                      "." +
+                      (campo.titulo | uppercase) | translate
+                  }}
+                </span>
+              </div>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of arrItems; let i = index">
+            <td
+              *ngFor="let key of item | keys"
+              [ngClass]="{
+                'text-end':
+                  item[key].aplicaFormatoNumerico ||
+                  item[key].alinearAlaIzquierda,
+                'text-center': item[key].campoTipo === 'Booleano'
+              }"
+            >
+              {{ getTipoDato(item[key]) }}
+            </td>
+            <td class="text-center">
+              <button
+                class="btn btn-active-light-primary p-1"
+                (click)="seleccionar(arrItems, i)"
+                placement="top"
+                ngbTooltip="Seleccionar registro"
+                container="body"
+              >
+                <i class="ki-duotone ki-check"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-template>

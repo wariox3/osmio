@@ -1,0 +1,103 @@
+<form [formGroup]="formularioGrupo" (ngSubmit)="enviarFormulario()">
+  <app-comun-encabezado-formulario-nuevo
+    [estadoAprobado]="false"
+  ></app-comun-encabezado-formulario-nuevo>
+  <app-card>
+    <section card-titulo>
+      <app-comun-titulo-accion [nombreModelo]="'grupo'"></app-comun-titulo-accion>
+    </section>
+    <section card-body>
+      <div class="row mb-2">
+        <div class="col-md-6 col-sm-12">
+          <label
+            translate="FORMULARIOS.CAMPOS.COMUNES.NOMBRE"
+            class="form-label required"
+          ></label>
+          <input
+            formControlName="nombre"
+            class="form-control"
+            type="text"
+            autocomplete="off"
+            [ngClass]="{
+              'is-invalid':
+                formularioGrupo.controls['nombre'].touched &&
+                formularioGrupo.controls['nombre'].invalid,
+              'is-valid':
+                formularioGrupo.controls['nombre'].touched &&
+                formularioGrupo.controls['nombre'].valid
+            }"
+            appSoloNumeros
+          />
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioGrupo.controls['nombre']
+            }"
+          ></ng-container>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'maxlength',
+              message:
+                'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+              cantidadCaracteres: '100',
+              control: formularioGrupo.controls['nombre']
+            }"
+          ></ng-container>
+        </div>
+
+        <div class="col-md-6 col-sm-12">
+          <label
+            class="form-label required"
+            translate="FORMULARIOS.CAMPOS.HUMANO.PROGRAMACION.PERIODO"
+          ></label>
+          <ng-select
+            [items]="listaPeriodos$ | async"
+            bindLabel="periodo_nombre"
+            bindValue="periodo_id"
+            formControlName="periodo"
+            notFoundText="Sin elementos"
+            placeholder="Selecciona un elemento"
+            class="select2Custom"
+            [ngClass]="{
+              'is-invalid':
+                formularioGrupo.controls['periodo'].touched &&
+                formularioGrupo.controls['periodo'].invalid,
+              'is-valid':
+                formularioGrupo.controls['periodo'].touched &&
+                formularioGrupo.controls['periodo'].valid
+            }"
+          >
+          </ng-select>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioGrupo.controls['periodo']
+            }"
+          ></ng-container>
+        </div>
+      </div>
+    </section>
+  </app-card>
+</form>
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+  let-cantidadCaracteres="cantidadCaracteres"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        <span role="alert"> {{ message }} {{ cantidadCaracteres }} </span>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

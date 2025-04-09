@@ -1,0 +1,155 @@
+<app-card [titulo]="'FORMULARIOS.TITULOS.COMUNES.FILTRO'">
+  <section card-body>
+    <app-base-filtro
+      (emitirFiltros)="obtenerFiltrosEmitir($event)"
+      [persistirFiltros]="false"
+      [_tipo]="'DOCUMENTO'"
+    ></app-base-filtro>
+  </section>
+</app-card>
+<div class="tabla">
+  <app-card [titulo]="'MENU.FUNCIONALIDAD.EVENTOSDIAN'">
+    <section card-body>
+      <div class="row mb-5 justify-content-between gap-sm-5">
+        <div class="col-md-5 col-sm-12 d-flex align-items-center gap-3 mb-2">
+          <i
+            (click)="disminuirDesplazamientoEmitir()"
+            class="bi bi-arrow-left fs-2x cursor-pointer"
+          ></i>
+          <input
+            type="text"
+            class="form-control form-control-sm w-100px"
+            [value]="paginacionEmitirDesde + 1 + '-' + paginacionEmitirHasta"
+            (blur)="calcularValorMostrarEmitir($event)"
+          />
+          <span>de</span>
+          <span>{{ cantidad_registros }}</span>
+          <i
+            (click)="aumentarDesplazamientoEmitir()"
+            class="bi bi-arrow-right fs-2x cursor-pointer"
+          ></i>
+        </div>
+        <div class="col-md-5 col-sm-12 d-flex justify-content-end my-2">
+          <div class="btn-group btn-group-sm contenedor-btn-group">
+            <app-importar-xml></app-importar-xml>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive table-loading">
+        <table
+          class="table table-hover table-bordered table-rounded border gy-2 gs-2"
+        >
+          <thead>
+            <tr class="fw-bold fs-6 text-gray-800">
+              <th class="bg-gray-100 text-center">
+                {{ "LISTAS.DOCUMENTO.ID" | translate }}
+              </th>
+              <th class="bg-gray-100 text-center">
+                {{ "LISTAS.DOCUMENTO.NUMERO" | translate }}
+              </th>
+              <th class="bg-gray-100 text-center">
+                {{ "LISTAS.DOCUMENTO.FECHA" | translate }}
+              </th>
+              <th class="bg-gray-100 text-center">
+                {{ "LISTAS.DOCUMENTO.CODIGO" | translate }}
+              </th>
+              <th class="bg-gray-100 text-center">
+                {{
+                  "LISTAS.DOCUMENTO.DOCUMENTO_CONTACTO_NUMERO_IDENTIFICACION"
+                    | translate
+                }}
+              </th>
+              <th class="bg-gray-100 text-center">
+                {{ "LISTAS.DOCUMENTO.PROVEEDOR" | translate }}
+              </th>
+
+              <th class="bg-gray-100 text-center" style="min-width: 100px">
+                {{ "LISTAS.DOCUMENTO.REFERENCIA_PREFIJO" | translate }}
+              </th>
+              <th class="bg-gray-100 text-center" style="min-width: 100px">
+                {{ "LISTAS.DOCUMENTO.REFERENCIA_NUMERO" | translate }}
+              </th>
+              <th class="bg-gray-100 text-center">
+                {{ "LISTAS.DOCUMENTO.TOTAL" | translate }}
+              </th>
+              <th class="bg-gray-100 text-center">Electronico</th>
+              <th class="bg-gray-100 text-center">Documento</th>
+              <th class="bg-gray-100 text-center">Recepción</th>
+              <th class="bg-gray-100 text-center">Aceptación</th>
+              <th class="bg-gray-100 text-center"></th>
+              <th class="bg-gray-100 text-center"></th>
+              <th class="bg-gray-100 text-center"></th>
+            </tr>
+          </thead>
+          <Tbody>
+            <tr *ngFor="let documentoEmitir of arrDocumentosEmitir">
+              <td>{{ documentoEmitir.id }}</td>
+              <td>{{ documentoEmitir.numero }}</td>
+              <td>{{ documentoEmitir.fecha }}</td>
+              <td>{{ documentoEmitir.contacto_id }}</td>
+              <td>{{ documentoEmitir.contacto_numero_identificacion }}</td>
+              <td>{{ documentoEmitir.contacto_nombre_corto }}</td>
+
+              <td>
+                {{ documentoEmitir.referencia_prefijo }}
+              </td>
+              <td>
+                {{ documentoEmitir.referencia_numero | number }}
+              </td>
+              <td class="text-end">
+                {{ documentoEmitir.total | number }}
+              </td>
+              <td class="text-center">
+                {{ documentoEmitir.estado_electronico | siNo }}
+              </td>
+              <td>
+                <app-visualizar-estados-eventos-dian
+                  [estado]="documentoEmitir.evento_documento"
+                >
+                </app-visualizar-estados-eventos-dian>
+              </td>
+              <td>
+                <app-visualizar-estados-eventos-dian
+                  [estado]="documentoEmitir.evento_recepcion"
+                >
+                </app-visualizar-estados-eventos-dian>
+              </td>
+              <td>
+                <app-visualizar-estados-eventos-dian
+                  [estado]="documentoEmitir.evento_aceptacion"
+                >
+                </app-visualizar-estados-eventos-dian>
+              </td>
+              <td class="text-center">
+                @if(documentoEmitir.estado_electronico === false){
+                <app-editar-eventos-dian
+                  [documento]="documentoEmitir"
+                  (emitirConsultarLista)="consultarLista()"
+                ></app-editar-eventos-dian>
+                }
+              </td>
+              <td>
+                @if(documentoEmitir.estado_electronico === false || (
+                documentoEmitir.estado_electronico === true &&
+                documentoEmitir.evento_documento === 'PE' ) ){
+                <button
+                  class="btn btn-secondary btn-sm"
+                  (click)="confirmarDescartar(documentoEmitir.id)"
+                >
+                  Descartar
+                </button>
+                }
+              </td>
+              <td>
+                <app-gestion-estados-eventos-dian
+                  [documento]="documentoEmitir"
+                  (emitirConsultarLista)="consultarLista()"
+                ></app-gestion-estados-eventos-dian>
+              </td>
+            </tr>
+          </Tbody>
+        </table>
+      </div>
+    </section>
+  </app-card>
+</div>

@@ -1,0 +1,76 @@
+<ng-container *ngIf="title$ | async as title">
+  <!-- begin::Title -->
+  <h1
+    class="page-heading d-flex text-dark fw-bold fs-3 my-0"
+    [ngClass]="{
+      'flex-column justify-content-center': appPageTitleDirection,
+      'align-items-center': !appPageTitleDirection,
+    }"
+  >
+    <!-- begin::Description -->
+    <span
+      class="page-desc text-muted fs-7 fw-semibold d-flex align-items-center gap-1"
+      [ngClass]="{ 'pt-2': appPageTitleDirection === 'column' }"
+    >
+      <ng-container *ngIf="appPageTitleDirection === 'row'">
+        <!-- begin::Separator -->
+        <span
+          class="h-20px border-1 border-gray-300 border-start ms-3 mx-2"
+        ></span>
+        <!-- end::Separator -->
+      </ng-container>
+
+      @if (visualizarBreadcrumb$ | async) {
+        @for (
+          breadcrumb of breadcrumbSignal();
+          track $index;
+          let first = $first,
+          last = $last
+        ) {
+          @if (first) {
+            <span
+              #breadcrumbsText
+              [routerLink]="breadcrumb.url"
+              [ngClass]="{ 'cursor-pointer text-hover-primary': first }"
+              appAnimationFadeinLeft
+              >{{
+                "MENU.TITULOS." + breadcrumb.label
+                  | uppercase
+                  | translate
+                  | appCapitalizePipe
+              }}</span
+            >
+          } @else {
+            <span
+              #breadcrumbsText
+              [routerLink]="breadcrumb.url"
+              [ngClass]="{ 'cursor-pointer text-hover-primary': first }"
+              appAnimationFadeinLeft
+              >{{ breadcrumb.label | appCapitalizePipe }}</span
+            >
+          }
+          @if (!last) {
+            <span appAnimationFadeinLeft> / </span>
+          } @else {
+            @if (!visualizarIconoCopiado()) {
+              <i
+                class="ki-outline ki-copy ms-3 cursor-pointer fs-4"
+                ngbTooltip="Copiar"
+                (click)="copiarbreadcrumbsText()"
+              ></i>
+            } @else {
+              <i
+                class="ki-duotone ki-copy-success ms-3 cursor-pointer text-success fs-4"
+              >
+                <span class="path1"></span>
+                <span class="path2"></span>
+              </i>
+            }
+          }
+        }
+      }
+    </span>
+    <!-- end::Description -->
+  </h1>
+  <!-- end::Title -->
+</ng-container>

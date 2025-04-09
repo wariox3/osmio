@@ -1,0 +1,125 @@
+<form [formGroup]="formularioCargo" (ngSubmit)="enviarFormulario()">
+  <app-comun-encabezado-formulario-nuevo
+    [estadoAprobado]="false"
+  ></app-comun-encabezado-formulario-nuevo>
+  <app-card>
+    <section card-titulo>
+      <app-comun-titulo-accion [nombreModelo]="'cargo'"></app-comun-titulo-accion>
+    </section>
+    <section card-body>
+      <div class="row mb-2"></div>
+      <div class="row mb-2">
+        <div class="col-md-6 col-sm-12">
+          <label
+            translate="FORMULARIOS.CAMPOS.COMUNES.NOMBRE"
+            class="form-label required"
+          ></label>
+          <input
+            formControlName="nombre"
+            class="form-control"
+            type="text"
+            autocomplete="off"
+            [ngClass]="{
+              'is-invalid':
+                formularioCargo.controls['nombre'].touched &&
+                formularioCargo.controls['nombre'].invalid,
+              'is-valid':
+                formularioCargo.controls['nombre'].touched &&
+                formularioCargo.controls['nombre'].valid
+            }"
+          />
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioCargo.controls['nombre']
+            }"
+          ></ng-container>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'maxlength',
+              message:
+                'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+              cantidadCaracteres: '200',
+              control: formularioCargo.controls['nombre']
+            }"
+          ></ng-container>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <label
+            translate="FORMULARIOS.CAMPOS.HUMANO.CARGO.CODIGO"
+            class="form-label required"
+          ></label>
+          <input
+            formControlName="codigo"
+            class="form-control"
+            type="text"
+            autocomplete="off"
+            [ngClass]="{
+              'is-invalid':
+                formularioCargo.controls['codigo'].touched &&
+                formularioCargo.controls['codigo'].invalid,
+              'is-valid':
+                formularioCargo.controls['codigo'].touched &&
+                formularioCargo.controls['codigo'].valid
+            }"
+            appSoloNumeros
+          />
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'maxlength',
+              message:
+                'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+              cantidadCaracteres: '20',
+              control: formularioCargo.controls['codigo']
+            }"
+          ></ng-container>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+              control: formularioCargo.controls['codigo']
+            }"
+          ></ng-container>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-check form-check-custom form-check-solid my-5">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="estado_inactivo"
+              formControlName="estado_inactivo"
+            />
+            <label class="form-check-label text-gray-700" for="estado_inactivo">
+              {{ "FORMULARIOS.CAMPOS.HUMANO.CARGO.ESTADOINACTIVO" | translate }}
+            </label>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12"></div>
+      </div>
+    </section>
+  </app-card>
+</form>
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+  let-cantidadCaracteres="cantidadCaracteres"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        <span role="alert"> {{ message }} {{ cantidadCaracteres }} </span>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

@@ -1,0 +1,113 @@
+<form
+  class="form w-100"
+  novalidate="novalidate"
+  [formGroup]="formularioConfiguracion"
+  (ngSubmit)="formSubmit()"
+>
+  <div class="fv-row d-flex mb-5">
+    <button
+      translate="FORMULARIOS.BOTONES.COMUNES.GUARDAR"
+      type="submit"
+      class="btn btn-sm btn-primary"
+      type="submit"
+      #btnGuardar
+    ></button>
+  </div>
+  <div class="row mb-5">
+    <div class="col-md-12 col-sm-12">
+      <label
+        translate="FORMULARIOS.CAMPOS.CONFIGURACIONGENREAL.UVT"
+        class="form-label required"
+      ></label>
+      <input
+        formControlName="gen_uvt"
+        class="form-control"
+        type="test"
+        [ngClass]="{
+          'is-invalid':
+            formularioConfiguracion.controls['gen_uvt'].touched &&
+            formularioConfiguracion.controls['gen_uvt'].invalid,
+          'is-valid':
+            formularioConfiguracion.controls['gen_uvt'].touched &&
+            formularioConfiguracion.controls['gen_uvt'].valid
+        }"
+        appSoloNumeros
+      />
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'required',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+          control: formularioConfiguracion.controls['gen_uvt']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'maxlength',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+          cantidadCaracteres: '6',
+          control: formularioConfiguracion.controls['gen_uvt']
+        }"
+      ></ng-container>
+      <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+        validation: 'pattern',
+        message: 'FORMULARIOS.VALIDACIONES.COMUNES.NOVALIDO' | translate,
+        control: formularioConfiguracion.controls['gen_uvt']
+      }"></ng-container>
+    </div>
+  </div>
+</form>
+<div class="row mb-5">
+  <div class="col-12">
+    <ul
+      ngbNav
+      #nav="ngbNav"
+      [(activeId)]="tabActive"
+      class="nav nav-tabs nav-line-tabs nav-line-tabs-2x mb-5 fs-6"
+    >
+      <li [ngbNavItem]="1" [destroyOnHide]="true" class="nav-item">
+        <a
+          class="nav-link"
+          [ngClass]="{ 'text-primary': tabActive === 1 }"
+          ngbNavLink
+          data-bs-toggle="tab"
+          translate="FORMULARIOS.TITULOS.EMPRESA.DOCUMENTOS"
+        ></a>
+        <ng-template ngbNavContent>
+          <app-empresa-documento-tipo></app-empresa-documento-tipo>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="2" [destroyOnHide]="true" class="nav-item">
+        <a
+          class="nav-link"
+          [ngClass]="{ 'text-primary': tabActive === 2 }"
+          ngbNavLink
+          data-bs-toggle="tab"
+          translate="FORMULARIOS.BOTONES.COMUNES.IMPUESTOS"
+          ></a>
+        <ng-template ngbNavContent>
+          <app-impuestos-lista></app-impuestos-lista>
+        </ng-template>
+      </li>
+    </ul>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+  </div>
+</div>
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+  let-cantidadCaracteres="cantidadCaracteres"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        <span role="alert"> {{ message }} {{ cantidadCaracteres }} </span>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

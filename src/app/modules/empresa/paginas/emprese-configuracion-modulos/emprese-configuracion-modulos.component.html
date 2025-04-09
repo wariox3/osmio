@@ -1,0 +1,51 @@
+<app-card [visualizarTitulo]="false">
+  <section card-body>
+    <h3>Configuraciones</h3>
+    <div class="d-flex overflow-auto h-55px">
+      <ul
+        class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap"
+      >
+        <li class="nav-item mb-2">
+          <a
+            class="nav-link text-active-primary me-6 cursor-pointer"
+            (click)="seleccionarConfiguracion('general')"
+            [translate]="'MENU.TITULOS.GENERAL'"
+            [ngClass]="{ active: menuSeleccionado === 'general' }"
+          >
+          </a>
+        </li>
+
+        @for (item of arrMenuApps; track $index) {
+        <li class="nav-item mb-2">
+          <a
+            class="nav-link text-active-primary cursor-pointer"
+            (click)="seleccionarConfiguracion(item)"
+            [translate]="'MENU.TITULOS.'+(item | uppercase)"
+            [ngClass]="{ active: menuSeleccionado === item }"
+          >
+          </a>
+        </li>
+        }
+      </ul>
+    </div>
+    @switch (menuSeleccionado) { @case ('compra') {
+    <app-configuracion-compra></app-configuracion-compra>
+    } @case ('venta') {
+    <app-configuracion-venta></app-configuracion-venta>
+    } @case ('contabilidad') {
+    <app-configuracion-contabilidad></app-configuracion-contabilidad>
+    } @case ('cartera') {
+    <app-configuracion-cartera></app-configuracion-cartera>
+    } @case ('humano') {
+    <app-configuracion-humano></app-configuracion-humano>
+    } @case ('inventario') {
+    <app-configuracion-inventario></app-configuracion-inventario>
+    } @case ('tesoreria') {
+    <app-configuracion-tesoreria></app-configuracion-tesoreria>
+    } @case ('general') {
+    <app-configuracion-general></app-configuracion-general>
+    } @case ('transporte') {
+    <app-configuracion-transporte></app-configuracion-transporte>
+    } }
+  </section>
+</app-card>

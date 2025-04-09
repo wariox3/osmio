@@ -1,0 +1,155 @@
+<form
+  class="form w-100"
+  novalidate="novalidate"
+  [formGroup]="formularioContenedor"
+  (ngSubmit)="formSubmit()"
+>
+
+  <div class="row mb-10">
+    <div class="col-md-12 col-sm-12">
+      <label
+        translate="FORMULARIOS.CAMPOS.COMUNES.NOMBRE"
+        class="form-label required"
+      ></label>
+      <input
+        formControlName="nombre"
+        class="form-control bg-transparent"
+        type="text"
+        autocomplete="off"
+        [ngClass]="{
+          'is-invalid':
+            formularioContenedor.controls['nombre'].touched &&
+            formularioContenedor.controls['nombre'].invalid,
+          'is-valid':
+            formularioContenedor.controls['nombre'].touched &&
+            formularioContenedor.controls['nombre'].valid
+        }"
+      />
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'required',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.REQUERIDO' | translate,
+          control: formularioContenedor.controls['nombre']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'pattern',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.NOVALIDO' | translate,
+          control: formularioContenedor.controls['nombre']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'minlength',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMINIMO' | translate,
+          cantidadCaracteres: '3',
+          control: formularioContenedor.controls['nombre']
+        }"
+      ></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="formError"
+        [ngTemplateOutletContext]="{
+          validation: 'maxlength',
+          message: 'FORMULARIOS.VALIDACIONES.COMUNES.CAMPOMAXIMO' | translate,
+          cantidadCaracteres: '100',
+          control: formularioContenedor.controls['nombre']
+        }"
+      ></ng-container>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="row container justify-content-center">
+      <div class="tabs">
+        <button
+          type="button"
+          class="tab-button"
+          (click)="cambiarTipoPlanes('F')"
+          [class.active]="activePlanTab() === 'F'"
+        >
+          <i class="bi bi-building me-1"></i>
+          Facturación
+        </button>
+        <button
+          [class.active]="activePlanTab() === 'E'"
+          type="button"
+          class="tab-button"
+          (click)="cambiarTipoPlanes('E')"
+        >
+          <i
+            class="bi bi-database me-1 icon"
+            [class.active]="'erp' === 'erp'"
+          ></i>
+          Planes ERP
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-10">
+    <div class="container py-5">
+      <div class="row g-4 justify-content-center">
+        <!-- Featured Card -->
+
+        @for (plan of planesAgrupadosPorTipo(); track $index) {
+        <div class="col-lg-3">
+          <div
+            class="card h-100 p-3 pricing-card position-relative overflow-hidden"
+            (click)="seleccionarPlan(plan)"
+            [class.active]="planSeleccionado === plan.id"
+          >
+            <div class="card-body p-5">
+              <h4 class="fw-bold mb-4 card__title">{{ plan.nombre }}</h4>
+              <div class="mb-4">
+                <span class="card__price"
+                  >${{ plan.precio | number : "1.0-0" }}</span
+                >
+                <span class="text-muted">/mes</span>
+              </div>
+              <ul class="list-unstyled mb-4">
+                @for (item of informacionPlanes[plan.id]; track $index) {
+                <li class="mb-3 d-flex align-items-center">
+                  <i class="bi bi-check-lg text-success me-2"></i>
+                  {{ item | translate }}
+                </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="fv-row d-flex justify-content-end">
+    <button
+      translate="FORMULARIOS.BOTONES.COMUNES.GUARDAR"
+      type="submit"
+      class="btn btn-primary"
+      type="submit"
+      #btnGuardar
+    ></button>
+  </div>
+</form>
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+  let-cantidadCaracteres="cantidadCaracteres"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        <span role="alert"> {{ message }} {{ cantidadCaracteres }} </span>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

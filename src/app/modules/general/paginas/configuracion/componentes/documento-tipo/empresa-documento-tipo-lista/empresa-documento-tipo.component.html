@@ -1,0 +1,88 @@
+  <section card-body>
+    <div class="table-responsive-sm">
+      <table id="tableDetalles" class="table table-bordered table-row-gray-500">
+        <thead>
+          <tr class="bg-gray-100">
+            <th style="width: 50px">Id</th>
+            <th>Nombre</th>
+            <th>Consecutivo</th>
+            <th>Resolución</th>
+            <th>Número</th>
+            <th>Prefijo</th>
+            <th>Venta</th>
+            <th>Compra</th>
+            <th>Cod</th>
+            <th>Cuenta cobrar</th>
+            <th>Cod</th>
+            <th>Cuenta pagar</th>
+            <th style="width: 50px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (documentoTipo of arrDocumentosTipos; track documentoTipo.id) {
+          <tr>
+            <td style="width: 50px">{{ documentoTipo.id }}</td>
+            <td class="w-50 text-start">
+              {{ documentoTipo.nombre }}
+            </td>
+            <td style="width: 10rem">
+              {{ documentoTipo.consecutivo }}
+            </td>
+            <td style="width: 10rem">
+              {{ documentoTipo.resolucion_id }}
+            </td>
+            <td style="width: 10rem">
+              {{ documentoTipo.resolucion_numero }}
+            </td>
+            <td style="width: 10rem">
+              {{ documentoTipo.resolucion_prefijo }}
+            </td>
+            <td class="w-45px text-center">
+              {{ documentoTipo.venta | siNo }}
+            </td>
+            <td class="w-45px text-center">
+              {{ documentoTipo.compra | siNo }}
+            </td>
+            <td class="w-45px text-center">
+              {{ documentoTipo.cuenta_cobrar_codigo }}
+            </td>
+            <td>
+              {{ documentoTipo.cuenta_cobrar_nombre }}
+            </td>
+            <td class="w-45px text-center">
+              {{ documentoTipo.cuenta_pagar_codigo }}
+            </td>
+            <td>
+              {{ documentoTipo.cuenta_pagar_nombre }}
+            </td>
+            <td class="w-45px text-center">
+              <label (click)="navegarEditar(documentoTipo, content)" class="cursor-pointer">
+                <i class="ki-duotone ki-notepad-edit hover-primary">
+                  <span class="path1"></span>
+                  <span class="path2"></span>
+                </i>
+              </label>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <ng-template #content let-modal>
+      <div class="modal-header">
+        <h3>Editar documento tipo</h3>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <app-empresa-documento-tipo-editar [ocultarBtnAtras]="true" (emitirGuardoRegistro)="cerrarModal($event)"
+          [tituloFijo]="true"
+          [tipoRolucion]="documentoTipoSeleccionado.venta ? 'venta' : documentoTipoSeleccionado.compra ? 'compra' : 'venta'"
+          [idEditarInformacion]="resolucionId" [editarInformacion]="true" />
+      </div>
+    </ng-template>
+  </section>

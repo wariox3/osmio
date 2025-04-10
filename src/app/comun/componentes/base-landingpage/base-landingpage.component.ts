@@ -3,6 +3,7 @@ import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { BtnWhatsappComponent } from '@comun/componentes/btn-whatsapp/btn-whatsapp.component';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { environment } from '@env/environment';
 import { TranslationService } from '@modulos/i18n';
 import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ContactarAsesorComponent } from "../contactar-asesor/contactar-asesor.component";
@@ -31,6 +32,9 @@ interface LanguageFlag {
 })
 export class BaseLandingpageComponent implements OnInit {
   private readonly _modalService = inject(NgbModal)
+
+  public protocolo = environment.dominioHttp
+  public dominio = environment.dominio
   fechaActual: Date = new Date();
   estadoMenu = false;
   menufijo = false;

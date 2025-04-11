@@ -1,0 +1,37 @@
+// features.component.scss
+.feature-section {
+  padding: 3rem 0;
+
+  &:nth-child(odd) {
+    background-color: rgba(#f8f9fa, 0.5);
+  }
+
+  .feature-list {
+    list-style: none;
+    padding-left: 0;
+
+    li {
+      position: relative;
+      padding-left: 1.5rem;
+    }
+  }
+
+  img {
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
+}
+
+.competitor-section {
+  transition: all 0.3s ease;
+  background-color: rgba(#f8f9fa, 0.5);
+  
+  h3 {
+    position: relative;
+    padding-bottom: 0.5rem;
+  
+  }
+}

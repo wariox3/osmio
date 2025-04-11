@@ -1,0 +1,69 @@
+<app-base-landingpage>
+  <section contenido>
+    <div class="mb-n10 mb-lg-n20 z-index-2">
+      <!-- features.component.html -->
+      <div class="container py-5">
+        <div class="row mb-5 text-center">
+          <div class="col">
+            <h1 class="display-4">Características</h1>
+            <p class="lead">
+              Herramientas completas para gestionar tus transacciones
+              comerciales
+            </p>
+          </div>
+        </div>
+
+        <div *ngFor="let feature of salesFeatures" class="feature-section mb-5">
+          <div class="row align-items-center">
+            <!-- Imagen a la izquierda o derecha según align -->
+            <div
+              [class.order-lg-1]="feature.align === 'right'"
+              class="col-lg-6 mb-4 mb-lg-0 d-flex justify-content-center"
+            >
+              <img
+                [src]="feature.imageUrl"
+                [alt]="feature.title"
+                class="img-fluid rounded"
+                style="height: 24rem !important"
+              />
+            </div>
+
+            <!-- Contenido de texto -->
+            <div class="col-lg-6">
+              <h2 class="h1 mb-4">{{ feature.title }}</h2>
+              <p class="fw-semibold fs-5 fs-lg-4 text-muted">
+                {{ feature.description }}
+              </p>
+
+              <ul class="">
+                @for (item of feature.about; track $index) {
+                  <li class="mb-2 fw-semibold fs-6 fs-lg-4 text-muted">
+                    {{ item }}
+                  </li>
+                }
+              </ul>
+
+              @if (feature.extraDescription) {
+                <p class="lead mb-4 fw-semibold fs-6 fs-lg-4 text-muted">
+                  {{ feature.extraDescription }}
+                </p>
+              }
+
+              <h3 class="h4 mb-4">Características</h3>
+
+              <ul *ngIf="feature.featuresList" class="feature-list">
+                <li
+                  *ngFor="let item of feature.featuresList"
+                  class="mb-2 fw-semibold fs-6 fs-lg-4 text-muted"
+                >
+                  <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                  {{ item }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</app-base-landingpage>

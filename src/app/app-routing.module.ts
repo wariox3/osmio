@@ -74,8 +74,8 @@ export const routes: Routes = [
   {
     path: 'caracteristicas',
     loadComponent: () =>
-      import('./pages/contruccion/contruccion.component').then(
-        (c) => c.ContruccionComponent
+      import('./pages/caracteristicas/caracteristicas.component').then(
+        (c) => c.CaracteriticasComponent
       ),
   },
   {

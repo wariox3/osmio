@@ -31,23 +31,6 @@
             <!-- Contenido de texto -->
             <div class="col-lg-6">
               <h2 class="h1 mb-4">{{ feature.title }}</h2>
-              <p class="fw-semibold fs-5 fs-lg-4 text-muted">
-                {{ feature.description }}
-              </p>
-
-              <ul class="">
-                @for (item of feature.about; track $index) {
-                  <li class="mb-2 fw-semibold fs-6 fs-lg-4 text-muted">
-                    {{ item }}
-                  </li>
-                }
-              </ul>
-
-              @if (feature.extraDescription) {
-                <p class="lead mb-4 fw-semibold fs-6 fs-lg-4 text-muted">
-                  {{ feature.extraDescription }}
-                </p>
-              }
 
               <h3 class="h4 mb-4">Características</h3>
 

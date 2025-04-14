@@ -8,9 +8,6 @@ import { BaseLandingpageComponent } from '@comun/componentes/base-landingpage/ba
 export interface Feature {
   id: number;
   title: string;
-  description: string;
-  about?: string[];
-  extraDescription?: string;
   imageUrl: string;
   align: 'left' | 'right';
   featuresList?: string[];
@@ -38,16 +35,6 @@ export class CaracteriticasComponent {
     {
       id: 1,
       title: 'Compras y Ventas',
-      description:
-        'Mantener en orden las compras y ventas es esencial para que tu negocio funcione sin problemas. Con Reddoc, este proceso se vuelve mucho más sencillo: podrás llevar un control eficiente de lo que adquieres, lo que vendes y cómo manejas tu inventario, evitando pérdidas y mejorando la rentabilidad.',
-      about: [
-        'Registra tus compras y ventas de manera rápida y sencilla.',
-        'Automatiza tu proceso con las facturas recurrentes.',
-        'Genera documentos electrónicos sin complicaciones.',
-        'Accede a informes en tiempo real para tomar mejores decisiones.',
-      ],
-      extraDescription:
-        'Así, en lugar de preocuparte por los números, puedes enfocarte en lo más importante: hacer crecer tu negocio.',
       imageUrl: 'assets/landing/REDDOC_ESCENAS_COMPRA Y VENTA_v01.png',
       align: 'right',
       featuresList: [
@@ -73,15 +60,6 @@ export class CaracteriticasComponent {
     {
       id: 2,
       title: 'Tesorería y Cartera',
-      description:
-        'Llevar el control de la cartera y la tesorería es clave para que tu negocio esté siempre en orden. La cartera se encarga de los cobros y pagos, asegurando un flujo de efectivo constante, mientras que la tesorería te ayuda a organizar recursos, optimizar fondos y mantener liquidez.',
-      about: [
-        'Gestiona tus pagos y tus cobros',
-        'Controla los vencimientos',
-        'Obtén informes detallados sobre estados de cuenta',
-      ],
-      extraDescription:
-        'Así, tendrás un mejor control financiero y podrás tomar decisiones estratégicas sin complicaciones.',
       imageUrl: 'assets/landing/REDDOC_ESCENAS_TESORERIA Y CARTERA_v01.png',
       align: 'left', // Alternamos la alineación con el anterior
       featuresList: [
@@ -101,16 +79,6 @@ export class CaracteriticasComponent {
     {
       id: 3,
       title: 'Inventario',
-      description:
-        'Con Reddoc, llevar el control de tu inventario es más fácil. Podrás registrar entradas y salidas en tiempo real, asegurarte de que tu stock esté siempre actualizado y generar informes para entender mejor el movimiento de tus productos y tomar decisiones estratégicas.Todo se integra con tu negocio, desde compras y ventas hasta contabilidad y POS, para que tomes decisiones más inteligentes y tu empresa sea más eficiente.',
-      about: [
-        'Control de existencias',
-        'Actualización del inventario en tiempo real',
-        'Seguimiento de movimientos',
-        'Control de costos',
-        'Informes detallados y análisis sobre el movimiento de inventarios',
-      ],
-      extraDescription: '',
       imageUrl: 'assets/landing/REDDOC_ESCENAS_INVENTARIO_v01.png', // Ajusta la ruta según tus necesidades
       align: 'right', // Alternando la alineación con el anterior (que era 'left')
       featuresList: [
@@ -130,15 +98,6 @@ export class CaracteriticasComponent {
     {
       id: 4,
       title: 'POS+',
-      description:
-        'Facilita tus ventas con un POS ágil y eficiente. Vender nunca había sido tan fácil. Con el módulo POS de Reddoc, puedes procesar transacciones de manera rápida y sin complicaciones, manteniendo todo sincronizado con tu inventario y contabilidad.',
-      about: [
-        'Registra ventas en segundos',
-        'Acepta múltiples métodos de pago',
-        'Genera facturas electrónicas al instante',
-        'Mantén tu inventario actualizado automáticamente',
-        'Accede a reportes de ventas en tiempo real',
-      ],
       imageUrl: 'assets/landing/REDDOC_ESCENAS_POS_v01.png', // Ajusta la ruta según necesidades
       align: 'left', // Alternando la alineación (el anterior fue 'right')
       featuresList: [
@@ -156,14 +115,6 @@ export class CaracteriticasComponent {
     {
       id: 5,
       title: 'Nómina',
-      description:
-        'Manejar la nómina puede parecer complicado, pero con Reddoc es fácil y sin estrés. Podrás administrar pagos, generar nóminas electrónicas automáticamente y asegurarte de cumplir con las normativas vigentes. Todo está organizado para que ahorres tiempo y te enfoques en lo realmente importante: tu equipo y tu negocio.',
-      about: [
-        'Genera la nómina fácilmente',
-        'Líquida seguridad social sin errores',
-        'Accede a informes detallados en tiempo real',
-        'Cumple con la normativa sin complicaciones',
-      ],
       imageUrl: 'assets/landing/REDDOC_ESCENAS_NOMINA_v01.png',
       align: 'right', // Alternando la alineación (el anterior fue 'left')
       featuresList: [
@@ -189,17 +140,6 @@ export class CaracteriticasComponent {
     {
       id: 6,
       title: 'Contabilidad',
-      description:
-        'Sabemos que lidiar con números, facturas e impuestos puede ser todo un desafío, pero es fundamental para mantener la estabilidad de tu negocio. Con Reddoc, llevar tu contabilidad será pan comido. Tendrás una visión clara de tus compras, ventas e inventario para tomar decisiones con confianza, además de un registro detallado de tus transacciones para una auditoría sin complicaciones.',
-      about: [
-        'Accesibilidad remota',
-        'Intuitivo y fácil de usar',
-        'Automatización de documentos',
-        'Variedad de informes financieros',
-        'Simplificación del cumplimiento de obligaciones fiscales',
-      ],
-      extraDescription:
-        'Así, en lugar de perder tiempo con papeleo, puedes enfocarte en hacer crecer tu negocio con la tranquilidad de que tus finanzas están en orden.',
       imageUrl: 'assets/landing/REDDOC_ESCENAS_CONTABILIDAD_t01.png',
       align: 'left', // Alternando la alineación (el anterior fue 'right')
       featuresList: [

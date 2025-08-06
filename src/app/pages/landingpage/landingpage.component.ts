@@ -18,6 +18,7 @@ import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { CountUpModule } from 'ngx-countup';
 import { ContactarAsesorComponent } from '../../comun/componentes/contactar-asesor/contactar-asesor.component';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-landingpage',
@@ -39,7 +40,8 @@ import { ContactarAsesorComponent } from '../../comun/componentes/contactar-ases
 })
 export class LandingpageComponent implements OnInit {
   private readonly _modalService = inject(NgbModal);
-
+  public protocolo = environment.dominioHttp
+  public dominio = environment.dominio
   estadoMenu = false;
   menufijo = false;
   activeTab: number = 0;
@@ -67,7 +69,7 @@ export class LandingpageComponent implements OnInit {
     private formBuilder: FormBuilder,
     private http: HttpClient,
     private alertaService: AlertaService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.iniciarFormulario();
